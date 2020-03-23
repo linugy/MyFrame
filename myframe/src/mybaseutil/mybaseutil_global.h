@@ -1,0 +1,12 @@
+#ifndef MYBASEUTIL_GLOBAL_H
+#define MYBASEUTIL_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(MYBASEUTIL_LIBRARY)
+#  define MYBASEUTILSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define MYBASEUTILSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // MYBASEUTIL_GLOBAL_H
