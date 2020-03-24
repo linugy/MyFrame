@@ -4,19 +4,26 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT       += core gui script xml network sql serialport scripttools
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = myutil
 TEMPLATE = lib
 
 DEFINES += MYUTIL_LIBRARY
 
-SOURCES += myutil.cpp
+SOURCES += myutil.cpp \
+    mymain.cpp \
+    mylogin.cpp
 
 HEADERS += myutil.h\
-        myutil_global.h
+        myutil_global.h \
+    mymain.h \
+    mylogin.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
