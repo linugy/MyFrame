@@ -22,8 +22,8 @@ protected:
     const QScopedPointer<MyLoginPrivate> d_ptr;
 
 private:
-    Q_DISABLE_COPY(TopLogin)
-    Q_DECLARE_PRIVATE(TopLogin)
+    Q_DISABLE_COPY(MyLogin)
+    Q_DECLARE_PRIVATE(MyLogin)
 };
 
 #endif // MYLOGIN_H

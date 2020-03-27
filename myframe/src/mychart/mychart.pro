@@ -7,6 +7,9 @@
 QT       -= gui
 
 TARGET = mychart
+
+DESTDIR = $$PWD/../../../dist/qt5.6.3-win32-msvc2015/bin_dbg
+
 TEMPLATE = lib
 
 DEFINES += MYCHART_LIBRARY

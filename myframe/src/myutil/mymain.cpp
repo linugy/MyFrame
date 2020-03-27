@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QDebug>
+#include "mycore/mycore.h"
 
 /**
 * \brief main
@@ -40,11 +41,17 @@ QVariantMap MyMain::parseArgs(const QCoreApplication &app)
 int MyMain::run(const QVariantMap &iArgsMap)
 {
     Q_UNUSED(iArgsMap);
-    // 加载模块插件; 路径为执行路径下的plugins目录
+
+    // 加载模块插件到内存
     QDir plugdir(QApplication::applicationFilePath());
     plugdir.cd("plugins");
-    qDebug() << "-----plugdir----" << plugdir.absoluteFilePath();
-//    APP->setTopClassPluginDir(plugdir.absolutePath());
+    qDebug() <<plugdir.absolutePath();
+    APP->setPluginPath(plugdir.absolutePath());
+    APP->addPlugin();
 
-    // 显示登录界面
+    // 加载module到内存（需要读取config文件）
+
+    // 显示登陆界面
+    QString productUrl = iArgsMap.value("product").toString();
+    return 0;
 }
