@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QDebug>
 #include "mycore/mycore.h"
+#include "mylogin.h"
 
 /**
 * \brief main
@@ -50,8 +51,14 @@ int MyMain::run(const QVariantMap &iArgsMap)
     APP->addPlugin();
 
     // 加载module到内存（需要读取config文件）
+    APP->setModulePath(APP->readConfig());
+    APP->addPlugin();
 
-    // 显示登陆界面
+    // 解析传入参数，显示登陆界面
     QString productUrl = iArgsMap.value("product").toString();
+    MyLogin login;
+    login.setModuleTitle(productUrl);
+    login.exec();
+
     return 0;
 }

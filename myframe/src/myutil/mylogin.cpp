@@ -49,6 +49,11 @@ bool MyLogin::loginVerify()
     return true;
 }
 
+void MyLogin::setModuleTitle(const QString &iTitle)
+{
+
+}
+
 void MyLogin::initUi()
 {
     Q_D(MyLogin);

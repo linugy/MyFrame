@@ -14,6 +14,7 @@ public:
     ~MyLogin();
 public slots:
     bool loginVerify();
+    void setModuleTitle(const QString &iTitle);
 
 private slots:
     void initUi();

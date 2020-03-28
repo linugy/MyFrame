@@ -25,7 +25,7 @@ public slots:
     QString readConfig();
 
 private slots:
-    QString getDllName(const QStirng &iDllStr);
+    QString getDllName(const QString &iDllStr);
 
 private:
     MyCore();

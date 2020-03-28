@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       -= gui
+QT        += core widgets
 
 TARGET = $$qtLibraryTarget(mycore)
 
@@ -14,10 +15,13 @@ TEMPLATE = lib
 
 DEFINES += MYCORE_LIBRARY
 
-SOURCES += mycore.cpp
+SOURCES += mycore.cpp \
+    myclassabs.cpp
 
 HEADERS += mycore.h\
-        mycore_global.h
+        mycore_global.h \
+    myclassabs.h \
+    myclasspluginabs.h
 
 unix {
     target.path = /usr/lib
@@ -30,5 +34,5 @@ SDK_HEADER_PATH = $$system_path($$PWD/../../../dist/qt5.6.3-win32-msvc2015/inclu
     mkpath($${SDK_HEADER_PATH})
 }
 
-### 拷贝头文件
+### 
 system(copy *.h $${SDK_HEADER_PATH})

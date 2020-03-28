@@ -42,6 +42,7 @@ system(copy *.h $${SDK_HEADER_PATH})
 
 ### 包含头文件
 SDKPATH = $$PWD/../../../dist/qt5.6.3-win32-msvc2015
+message($$SDKPATH)
 INCLUDEPATH += $${SDKPATH}/include
 
 ### 包含dll
