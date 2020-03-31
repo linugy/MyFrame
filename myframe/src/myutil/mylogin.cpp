@@ -1,5 +1,7 @@
 #include "mylogin.h"
 #include <QPushButton>
+#include <mycore/mycore.h>
+#include <QDebug>
 
 class MyLoginPrivate
 {
@@ -13,6 +15,7 @@ protected:
 
 private:
     QPushButton *loginBtn;
+    QString curModuleUrl;
 };
 
 MyLoginPrivate::MyLoginPrivate(MyLogin *qPtr)
@@ -38,8 +41,8 @@ MyLogin::~MyLogin()
 
 bool MyLogin::loginVerify()
 {
-    // 打开软件主界面
-//    APP->openMainModule();
+    // 打开模块
+    APP->openModuleUrl(getModuleUrl());
 
     // 隐藏登录界面
     this->hide();
@@ -51,7 +54,18 @@ bool MyLogin::loginVerify()
 
 void MyLogin::setModuleTitle(const QString &iTitle)
 {
+}
 
+void MyLogin::setModuleUrl(const QString &iUrl)
+{
+    Q_D(MyLogin);
+    d->curModuleUrl = iUrl;
+}
+
+QString MyLogin::getModuleUrl()
+{
+    Q_D(MyLogin);
+    return d->curModuleUrl;
 }
 
 void MyLogin::initUi()
@@ -59,7 +73,6 @@ void MyLogin::initUi()
     Q_D(MyLogin);
     d->loginBtn = new QPushButton(this);
     d->loginBtn->setText("login");
-
 
     connect(d->loginBtn, SIGNAL(clicked()), this, SLOT(loginVerify()));
 }

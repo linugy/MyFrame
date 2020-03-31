@@ -44,20 +44,22 @@ int MyMain::run(const QVariantMap &iArgsMap)
     Q_UNUSED(iArgsMap);
 
     // 加载模块插件到内存
-    QDir plugdir(QApplication::applicationFilePath());
+    QDir plugdir(QApplication::applicationDirPath());
     plugdir.cd("plugins");
-    qDebug() <<plugdir.absolutePath();
     APP->setPluginPath(plugdir.absolutePath());
     APP->addPlugin();
 
     // 加载module到内存（需要读取config文件）
     APP->setModulePath(APP->readConfig());
-    APP->addPlugin();
+    APP->addModule();
 
     // 解析传入参数，显示登陆界面
     QString productUrl = iArgsMap.value("product").toString();
+    productUrl = "my-demo";// 测试
+
     MyLogin login;
-    login.setModuleTitle(productUrl);
+    login.setModuleUrl(productUrl);
+    login.setModuleTitle("Test");
     login.exec();
 
     return 0;

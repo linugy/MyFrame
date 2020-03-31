@@ -29,7 +29,7 @@ win32 {
     DEBUG_SUFFIX = d
 }
 
-LIB_LIST = mycore
+LIB_LIST = mycore myutil
 
 # libs
 LIBS += -L$$DESTDIR

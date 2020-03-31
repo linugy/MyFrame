@@ -16,6 +16,9 @@ public slots:
     bool loginVerify();
     void setModuleTitle(const QString &iTitle);
 
+    void setModuleUrl(const QString &iUrl);
+    QString getModuleUrl();
+
 private slots:
     void initUi();
 

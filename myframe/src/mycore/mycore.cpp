@@ -7,6 +7,10 @@
 #include <QDir>
 #include <QJsonParseError>
 #include <QJsonDocument>
+#include "myclasspluginabs.h"
+#include "myclassabs.h"
+#include <QDebug>
+#include <QMainWindow>
 
 class MyCorePrivate
 {
@@ -19,6 +23,7 @@ public:
     QMap<QString, QObject*> mPluginMap;// dll名称对应插件
     QString mModuleCfgPath;
     QMap<QString, QVariantMap> mModuleCfgMap;// module名称对应内容
+    QString curModuleUrl;
 
 protected:
     MyCore * const q_ptr;
@@ -34,6 +39,7 @@ MyCorePrivate::~MyCorePrivate()
 }
 
 MyCore::MyCore()
+    : d_ptr(new MyCorePrivate(this))
 {
 }
 
@@ -70,25 +76,29 @@ void MyCore::addPlugin()
 void MyCore::setModulePath(const QString &iModuleCfgPath)
 {
     Q_D(MyCore);
-    d->mModuleCfgPath = iModuleCfgPath;
+    QDir dir(iModuleCfgPath);
+    d->mModuleCfgPath = dir.absolutePath();
 }
 
 void MyCore::addModule()
 {
     Q_D(MyCore);
     QDir moduleDir(d->mModuleCfgPath);
-    foreach (QString fileName, moduleDir.entryList(QDir::Files)) {
-        QFile file(fileName);
-        if ( !file.open( QIODevice::ReadWrite ) ) {
+    foreach (QFileInfo path, moduleDir.entryInfoList(QDir::Dirs)) {
+        if (path.fileName() == "." || path.fileName() == "..") {
+            continue;
+        }
+        QFile file(path.absoluteFilePath() + "/module.conf");
+        if (!file.open( QIODevice::ReadWrite)) {
             return;
         }
 
         QJsonParseError jsonParserError;
         QJsonDocument jsonDocument = QJsonDocument::fromJson( file.readAll(), &jsonParserError );
 
-        if ( !jsonDocument.isNull() && jsonParserError.error == QJsonParseError::NoError ) {
+        if (!jsonDocument.isNull() && jsonParserError.error == QJsonParseError::NoError) {
             QVariantMap m = jsonDocument.toVariant().toMap();
-            d->mModuleCfgMap.insert(fileName, m);
+            d->mModuleCfgMap.insert(path.fileName(), m);
         }
     }
 }
@@ -96,22 +106,55 @@ void MyCore::addModule()
 QString MyCore::readConfig()
 {
     QFile file("../../config/my.cfg");
-    if ( !file.open( QIODevice::ReadWrite ) ) {
+    if (!file.open( QIODevice::ReadWrite )) {
         return "";
     }
 
     QJsonParseError jsonParserError;
-    QJsonDocument jsonDocument = QJsonDocument::fromJson( file.readAll(), &jsonParserError );
+    QJsonDocument jsonDocument = QJsonDocument::fromJson( file.readAll(), &jsonParserError);
 
-    if ( !jsonDocument.isNull() && jsonParserError.error == QJsonParseError::NoError ) {
+    if (!jsonDocument.isNull() && jsonParserError.error == QJsonParseError::NoError) {
         QVariantMap m = jsonDocument.toVariant().toMap();
         return m.value("module_url").toString();
     }
     return "";
 }
 
+void MyCore::setModuleUrl(const QString &iModuleUrl)
+{
+    Q_D(MyCore);
+    d->curModuleUrl = iModuleUrl;
+}
+
+QString MyCore::getModuleUrl()
+{
+    Q_D(MyCore);
+    return d->curModuleUrl;
+}
+
+void MyCore::openModuleUrl(const QString &iModuleUrl)
+{
+    // 根据rul或者module对应的配置
+    Q_D(MyCore);
+    QVariantMap cfgMap = d->mModuleCfgMap.value(iModuleUrl);
+
+    // 获取plugin名称和class名称，调用插件的newclass
+    openModule(cfgMap.value("plugin").toString(), cfgMap.value("class").toString());
+}
+
 QString MyCore::getDllName(const QString &iDllStr)
 {
     QString dllStr = iDllStr;
     return dllStr.left(dllStr.length() - 5);
+}
+
+void MyCore::openModule(const QString &iPluginName, const QString &iClassName)
+{
+    // 获取插件
+    Q_D(MyCore);
+    QObject * obj = d->mPluginMap.value(iPluginName);
+    if (MyClassPluginAbs *interface = qobject_cast<MyClassPluginAbs *>(obj)) {
+        MyClassAbs *obj = interface->newClass(iClassName, QString(), QVariantMap());
+        obj->show();
+    }
 }

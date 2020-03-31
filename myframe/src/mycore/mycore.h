@@ -23,9 +23,15 @@ public slots:
     void setModulePath(const QString &iModuleCfgPath);
     void addModule();
     QString readConfig();
+    void setModuleUrl(const QString &iModuleUrl);
+    QString getModuleUrl();
+    void openModuleUrl(const QString &iModuleUrl);
 
 private slots:
     QString getDllName(const QString &iDllStr);
+
+private:
+    void openModule(const QString &iPluginName, const QString &iClassName);
 
 private:
     MyCore();

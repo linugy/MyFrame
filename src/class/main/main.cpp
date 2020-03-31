@@ -7,10 +7,12 @@
 #include <QFile>
 #include <QJsonParseError>
 #include <QJsonDocument>
+#include "myutil/myutil.h"
+#include "myutil/mymain.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+//    QApplication a(argc, argv);
     qDebug() << "-----------------------------start";
-    return a.exec();
+    return MyMain::appExec(argc, argv);
 }
