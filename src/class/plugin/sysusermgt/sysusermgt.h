@@ -8,10 +8,11 @@ class SysUserMgt : public MyClassAbs
 {
     Q_OBJECT
 public:
-    explicit SysUserMgt(const QString &iModuleName);
+    explicit SysUserMgt(const QString &iModuleName, QWidget *parent = nullptr);
     ~SysUserMgt();
 
 public slots:
+    QString getCurText();
 
 private:
     MyWidget *mWidget = nullptr;

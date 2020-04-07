@@ -1,4 +1,3 @@
-var text = this.getCurText(); 
-var label = new MyLabel;
-label.setText(text);
-label.show();
+print("--11111---", "11111111");
+var widget = new MyWidget;
+widget.show();

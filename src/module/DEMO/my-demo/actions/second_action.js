@@ -1,11 +1,5 @@
- (
-   { 
-     label: "SecondButton",
-     run: function() { 
-       var text = this.getCurText(); 
-       var label = new MyLabel;
-       label.setText(text);
-       label.show();
-     }
-   }
- )
+var title = this.getCurText(); 
+print("--22222---", title);
+var widget = new MyWidget;
+widget.setWindowTitle(title);
+widget.show();

@@ -28,7 +28,7 @@ private:
     void initActionConfMap(const QString &iModuleName);
     void initActionFunctionMap(const QString &iModuleName);
     void initButtons();
-    MyClassAbs *getCurModuleClassPoint();
+    QWidget *getCurModuleClassPoint(const QAction *action);
 
 protected:
     const QScopedPointer<MyClassAbsPrivate> d_ptr;

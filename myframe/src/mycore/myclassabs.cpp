@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QAction>
 
 class MyClassAbsPrivate
 {
@@ -91,7 +92,26 @@ QWidget* MyClassAbs::getWidgetByName(const QString &iToolBarName)
 */
 void MyClassAbs::onBtnClicked()
 {
-    getCurModuleClassPoint();
+    if (QAction *action = qobject_cast<QAction *>(sender())) {
+        QString funcStr = action->data().toString();
+        qDebug() << "action==========" << funcStr;
+        QWidget *curModule = getCurModuleClassPoint(action);
+        qDebug() << "--------------------------" << curModule;
+//        APP->scriptEngine()->evaluate(QString("function run(){") + funcStr + "}");
+//        qDebug() << "==========1111" << QString("function run(){") + funcStr + "}";
+//        QScriptValue object = APP->scriptEngine()->globalObject();
+//        QScriptValue func = object.property("run");
+//        func.call(APP->scriptEngine()->newQObject(curModule));
+
+
+        QString runStr = QString("function run(){") + funcStr + "}";
+        QScriptContext *content = APP->scriptEngine()->pushContext();
+        content->engine()->evaluate(runStr);
+        QScriptValue object = content->activationObject();
+        QScriptValue func = object.property("run");
+        func.call(content->engine()->newQObject(curModule));
+        APP->scriptEngine()->popContext();
+    }
 }
 
 void MyClassAbs::initModuleMap(const QString &iModuleName)
@@ -200,25 +220,20 @@ void MyClassAbs::initActionFunctionMap(const QString &iModuleName)
 void MyClassAbs::initButtons()
 {
     Q_D(MyClassAbs);
-    qDebug() << "-------initButtons-------";
-    qDebug() << "d->mUimMap" << d->mUimMap;
-    qDebug() << "-------" << d->mUimMap.keys();
     for (QString key : d->mUimMap.keys()) {
         if (key.toUpper().contains("TOOLBAR")) {
-            QWidget *toolBar = new QWidget();
-            QHBoxLayout *layout = new QHBoxLayout(toolBar);
-            toolBar->setLayout(layout);
+            QToolBar *toolBar = new QToolBar();
             QVariantList confLst = d->mUimMap.value(key).toList();
             for (QVariant var : confLst) {
                 QVariantMap m = var.toMap();
                 if (m.value("type").toString().toLower().contains("toolitem")) {
                     QString actionName = m.value("action").toString();
                     // 根据actionName获取配置
-                    QVariantMap actionConfMap = d->mActionConfMap.value(actionName + "_conf").toMap();
-                    QPushButton *pushButton = new QPushButton(actionConfMap.value("label").toString(), toolBar);
-                    pushButton->setText(actionConfMap.value("label").toString());
-//                    pushButton->setUserData(1, d->mAciontFunctionMap.value(actionName).toString());
-                    layout->addWidget(pushButton);
+                    QVariantMap actionConfMap = d->mActionConfMap.value(actionName).toMap();
+                    QAction *action = new QAction(actionConfMap.value("label").toString(), toolBar);
+                    action->setData(d->mAciontFunctionMap.value(actionName).toString());
+                    connect(action, SIGNAL(triggered(bool)), this, SLOT(onBtnClicked()));
+                    toolBar->addAction(action);
                 }
             }
             d->mToolBarMap.insert(key, toolBar);
@@ -231,7 +246,16 @@ void MyClassAbs::initButtons()
 * 首先获取点击的按钮，因为点击按钮的时候，模块肯定已经创建完成了。
 * 此时一直获取父类，如果parent是继承自 MyClassAbs，那么表示获取到了当前模块的指针
 */
-MyClassAbs *MyClassAbs::getCurModuleClassPoint()
+QWidget *MyClassAbs::getCurModuleClassPoint(const QAction *action)
 {
-    return nullptr;
+    QWidget *obj = action->parentWidget();
+    QWidget *objParent = obj->parentWidget();
+    qDebug() << "=======objParent======" << objParent->metaObject()->className();
+    while(objParent != nullptr && objParent->metaObject()->className() != "MyClassAbs") {
+        qDebug() << "=======obj=11111=====" << obj->metaObject()->className();
+        obj = objParent;
+        objParent = objParent->parentWidget();
+    }
+    qDebug() << "=======obj======" << obj->metaObject()->className();
+    return obj;
 }

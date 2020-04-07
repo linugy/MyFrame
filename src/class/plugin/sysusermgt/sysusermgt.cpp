@@ -7,22 +7,25 @@
 #include <QLabel>
 #include <QToolBar>
 #include <mycore/mycore.h>
-//#include <mybaseutil/myscriptengine.h>
+#include <QTableView>
 
-SysUserMgt::SysUserMgt(const QString &iModuleName)
+SysUserMgt::SysUserMgt(const QString &iModuleName, QWidget *parent)
+    : MyClassAbs(parent)
 {
     initModule(iModuleName);
-    qDebug() << "=====SysUserMgt======";
+
     mWidget = new MyWidget(this);
+    this->setCentralWidget(mWidget);
     QVBoxLayout *mLayout = new QVBoxLayout(mWidget);
-    qDebug() << qobject_cast<QWidget*>(getWidgetByName("MainToolBar"));
-    QWidget *toolbar;
-    if (toolbar = qobject_cast<QWidget*>(getWidgetByName("MainToolBar"))) {
-        qDebug() << "-----------ok";
-        toolbar->show();
-//        mLayout->addWidget(toolbar, 0);
+    mLayout->setMargin(0);
+    mLayout->setSpacing(0);
+    if (QToolBar *toolbar = qobject_cast<QToolBar*>(getWidgetByName("MainToolBar"))) {
+        mLayout->addWidget(toolbar);
     }
     mWidget->setLayout(mLayout);
+
+    QTableView *mView = new QTableView(this);
+    mLayout->addWidget(mView);
 
 
 //    mWidget = new MyWidget(this);
@@ -39,5 +42,10 @@ SysUserMgt::SysUserMgt(const QString &iModuleName)
 SysUserMgt::~SysUserMgt()
 {
 
+}
+
+QString SysUserMgt::getCurText()
+{
+    return "OKKK";
 }
 
