@@ -10,6 +10,6 @@ QStringList Plugin::getClassList()
 MyClassAbs *Plugin::newClass(const QString &iClassName, const QString &iModuleName, const QVariantMap &iUrlPars)
 {
     if (iClassName == "SysUserMgt") {
-        return new SysUserMgt();
+        return new SysUserMgt(iModuleName);
     }
 }

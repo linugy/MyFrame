@@ -86,6 +86,12 @@ void MyCore::setModulePath(const QString &iModuleCfgPath)
     d->mModuleCfgPath = dir.absolutePath();
 }
 
+QString MyCore::getModulePath()
+{
+    Q_D(MyCore);
+    return d->mModuleCfgPath;
+}
+
 void MyCore::addModule()
 {
     Q_D(MyCore);
@@ -145,7 +151,7 @@ void MyCore::openModuleUrl(const QString &iModuleUrl)
     QVariantMap cfgMap = d->mModuleCfgMap.value(iModuleUrl);
 
     // 获取plugin名称和class名称，调用插件的newclass
-    openModule(cfgMap.value("plugin").toString(), cfgMap.value("class").toString());
+    openModule(cfgMap.value("plugin").toString(), cfgMap.value("class").toString(), iModuleUrl);
 }
 
 MyScriptEngine *MyCore::scriptEngine()
@@ -160,13 +166,13 @@ QString MyCore::getDllName(const QString &iDllStr)
     return dllStr.left(dllStr.length() - 5);
 }
 
-void MyCore::openModule(const QString &iPluginName, const QString &iClassName)
+void MyCore::openModule(const QString &iPluginName, const QString &iClassName, const QString &iModuleName)
 {
     // 获取插件
     Q_D(MyCore);
     QObject * obj = d->mPluginMap.value(iPluginName);
     if (MyClassPluginAbs *interface = qobject_cast<MyClassPluginAbs *>(obj)) {
-        MyClassAbs *obj = interface->newClass(iClassName, QString(), QVariantMap());
+        MyClassAbs *obj = interface->newClass(iClassName, iModuleName, QVariantMap());
         obj->show();
     }
 }

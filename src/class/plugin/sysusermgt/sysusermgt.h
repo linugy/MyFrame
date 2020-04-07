@@ -8,7 +8,7 @@ class SysUserMgt : public MyClassAbs
 {
     Q_OBJECT
 public:
-    explicit SysUserMgt();
+    explicit SysUserMgt(const QString &iModuleName);
     ~SysUserMgt();
 
 public slots:
