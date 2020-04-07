@@ -37,7 +37,7 @@ win32 {
     DEBUG_SUFFIX = d
 }
 
-LIB_LIST = mycore
+LIB_LIST = mycore mywidget mybaseutil
 
 #
 des_dir = $$PWD/../../../dist/qt5.6.3-win32-msvc2015/bin_dbg

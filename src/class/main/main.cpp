@@ -3,12 +3,14 @@
 #include <QDir>
 #include <QPluginLoader>
 #include <QDebug>
-#include "mycore/mycore.h"
 #include <QFile>
 #include <QJsonParseError>
 #include <QJsonDocument>
-#include "myutil/myutil.h"
+#include "mycore/mycore.h"
+//#include "myutil/myutil.h"
 #include "myutil/mymain.h"
+//#include "mybaseutil/myscriptengine.h"
+#include <QScriptEngine>
 
 int main(int argc, char *argv[])
 {

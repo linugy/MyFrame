@@ -3,6 +3,7 @@
 
 #include "mycore/myclassabs.h"
 
+class MyWidget;
 class SysUserMgt : public MyClassAbs
 {
     Q_OBJECT
@@ -11,6 +12,9 @@ public:
     ~SysUserMgt();
 
 public slots:
+
+private:
+    MyWidget *mWidget = nullptr;
 };
 
 #endif // SYSUSERMGT_H

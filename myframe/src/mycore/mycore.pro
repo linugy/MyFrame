@@ -4,8 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
-QT        += core widgets
+QT       += core script widgets
 
 TARGET = $$qtLibraryTarget(mycore)
 
@@ -36,3 +35,26 @@ SDK_HEADER_PATH = $$system_path($$PWD/../../../dist/qt5.6.3-win32-msvc2015/inclu
 
 ### 
 system(copy *.h $${SDK_HEADER_PATH})
+
+
+# sdk path
+SDKPATH = $$PWD/../../../dist/qt5.6.3-win32-msvc2015
+
+# include headers
+INCLUDEPATH += $${SDKPATH}/include
+
+# debug suffix
+win32 {
+    DEBUG_SUFFIX = d
+}
+
+LIB_LIST = mybaseutil
+
+#
+des_dir = $$PWD/../../../dist/qt5.6.3-win32-msvc2015/bin_dbg
+
+# libs
+LIBS = -L$$des_dir
+for (lib, LIB_LIST) {
+    LIBS += -l$${lib}$${DEBUG_SUFFIX}
+}

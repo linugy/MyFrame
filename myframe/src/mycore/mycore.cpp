@@ -11,6 +11,7 @@
 #include "myclassabs.h"
 #include <QDebug>
 #include <QMainWindow>
+#include <mybaseutil/myscriptengine.h>
 
 class MyCorePrivate
 {
@@ -24,6 +25,7 @@ public:
     QString mModuleCfgPath;
     QMap<QString, QVariantMap> mModuleCfgMap;// module名称对应内容
     QString curModuleUrl;
+    MyScriptEngine *mEngine = nullptr;
 
 protected:
     MyCore * const q_ptr;
@@ -38,9 +40,13 @@ MyCorePrivate::~MyCorePrivate()
 {
 }
 
+//------end---------
+
 MyCore::MyCore()
     : d_ptr(new MyCorePrivate(this))
 {
+    Q_D(MyCore);
+    d->mEngine = new MyScriptEngine();
 }
 
 MyCore::~MyCore()
@@ -140,6 +146,12 @@ void MyCore::openModuleUrl(const QString &iModuleUrl)
 
     // 获取plugin名称和class名称，调用插件的newclass
     openModule(cfgMap.value("plugin").toString(), cfgMap.value("class").toString());
+}
+
+MyScriptEngine *MyCore::scriptEngine()
+{
+    Q_D(MyCore);
+    return d->mEngine;
 }
 
 QString MyCore::getDllName(const QString &iDllStr)

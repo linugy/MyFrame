@@ -4,12 +4,14 @@
 #include "mycore_global.h"
 #include <QScopedPointer>
 #include <QObject>
+#include <mybaseutil/myscriptengine.h>
 
 #if defined(APP)
 #undef APP
 #endif
 #define APP MyCore::instance()
 
+class MyScriptEngine;
 class MyCorePrivate;
 class MYCORESHARED_EXPORT MyCore : public QObject
 {
@@ -26,6 +28,8 @@ public slots:
     void setModuleUrl(const QString &iModuleUrl);
     QString getModuleUrl();
     void openModuleUrl(const QString &iModuleUrl);
+
+    MyScriptEngine *scriptEngine();
 
 private slots:
     QString getDllName(const QString &iDllStr);

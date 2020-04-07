@@ -2,10 +2,13 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QMessageBox>
+#include <QScriptEngine>
 #include <QDir>
 #include <QDebug>
 #include "mycore/mycore.h"
 #include "mylogin.h"
+#include <mywidget/mywidget.h>
+#include <mybaseutil/myscriptengine.h>
 
 /**
 * \brief main
@@ -56,6 +59,9 @@ int MyMain::run(const QVariantMap &iArgsMap)
     // 解析传入参数，显示登陆界面
     QString productUrl = iArgsMap.value("product").toString();
     productUrl = "my-demo";// 测试
+
+    // 加载框架脚本
+    APP->scriptEngine()->importExtension("widgets");
 
     MyLogin login;
     login.setModuleUrl(productUrl);

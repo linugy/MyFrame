@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui script xml network sql serialport scripttools
+QT       += core script widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -49,7 +49,7 @@ INCLUDEPATH += $${SDKPATH}/include
 win32 {
     DEBUG_SUFFIX = d
 }
-LIB_LIST = mycore
+LIB_LIST = mycore mybaseutil mywidget
 LIBS += -L$$DESTDIR
 for (lib, LIB_LIST) {
     LIBS += -l$${lib}$${DEBUG_SUFFIX}
