@@ -24,6 +24,7 @@ unix {
 }
 
 include (./sysusermgt/sysusermgt.pri)
+include (./sysmainwindow/sysmainwindow.pri)
 
 
 # sdk path
