@@ -7,6 +7,7 @@
 class QWidget;
 class QHBoxLayout;
 class WindowDragger;
+class MyQuickToolBar;
 
 class SysMainWindow : public MyClassAbs
 {
@@ -46,7 +47,7 @@ private:
 
 private:
     QWidget *mMainWidget = nullptr;
-    QToolBar *mQuickToolBar = nullptr;
+    MyQuickToolBar *mQuickToolBar = nullptr;
     WindowDragger *mWindowTitleBar = nullptr;
     QHBoxLayout *mWindowTitleLayout = nullptr;
     bool mMainwindowPressed= false;

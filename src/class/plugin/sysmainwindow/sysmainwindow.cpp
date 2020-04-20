@@ -8,7 +8,10 @@
 #include <QApplication>
 #include <QToolBar>
 #include <QPalette>
+#include <QToolButton>
 #include "windowdragger.h"
+#include "myquicktoolbar.h"
+#include "myquickbutton.h"
 
 #define MARGIN 5
 #define PADDING 5
@@ -83,7 +86,7 @@ void SysMainWindow::initUi()
     mainLayout->setSpacing(0);
 
     // 左侧quickToolBar
-    mQuickToolBar = new QToolBar(mMainWidget);
+    mQuickToolBar = new MyQuickToolBar(mMainWidget);
     mQuickToolBar->setOrientation(Qt::Vertical);
     mainLayout->addWidget(mQuickToolBar);
     // 添加多个quickBtn到quickToolBar
@@ -112,11 +115,25 @@ void SysMainWindow::initUi()
 
 void SysMainWindow::addQuickButtons()
 {
-    QPushButton *iconBtn = new QPushButton(mQuickToolBar);
-    iconBtn->setFixedHeight(40);
-    iconBtn->setFixedWidth(40);
-    iconBtn->setText("A");
-    mQuickToolBar->addWidget(iconBtn);
+    QToolButton *iconBtn = new QToolButton(mWindowTitleBar);
+    iconBtn->setFixedHeight(50);
+    iconBtn->setFixedWidth(50);
+    iconBtn->setText("ICON");
+    mQuickToolBar->addAction(mQuickToolBar->addWidget(iconBtn));
+
+    QVariantList lst;
+    QVariantMap m;
+    m.insert("title", "A");
+    lst.append(m);
+    m.insert("title", "B");
+    lst.append(m);
+    mQuickToolBar->loadQuickButtons(lst);
+
+    QToolButton *sysBtn = new QToolButton(mWindowTitleBar);
+    sysBtn->setFixedHeight(50);
+    sysBtn->setFixedWidth(50);
+    sysBtn->setText("SYS");
+    mQuickToolBar->addAction(mQuickToolBar->addWidget(sysBtn));
 }
 
 void SysMainWindow::addSysButtons()
