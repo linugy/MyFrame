@@ -15,48 +15,56 @@
 #include <QPainter>
 #include <QDebug>
 #include <QPalette>
+#include <QCursor>
 
 WindowDragger::WindowDragger(QWidget *parent)
     : QWidget(parent)
 {
-  mousePressed = false;
-  this->setFixedHeight(30);
-  QPalette pal(this->palette());
+    mousePressed = false;
+    this->setFixedHeight(30);
+      QPalette pal(this->palette());
 
-  //设置背景黑色
-  pal.setColor(QPalette::Background, QColor("#1E90FF"));
-  this->setAutoFillBackground(true);
-  this->setPalette(pal);
-
+      //设置背景黑色
+      pal.setColor(QPalette::Background, QColor("#e3e5e8"));
+      this->setAutoFillBackground(true);
+      this->setPalette(pal);
 }
 
 void WindowDragger::mousePressEvent(QMouseEvent *event) {
-  mousePressed = true;
-  mousePos = event->globalPos();
-  QWidget *parent = parentWidget();
-  if (parent) parent = parent->parentWidget();
-  if (parent) parent = parent->parentWidget();
-  if (parent) {
-      wndPos = parent->pos();
-  }
+    mousePressed = true;
+    mousePos = event->globalPos();
+    QWidget *parent = parentWidget();
+    if (parent) parent = parent->parentWidget();
+    if (parent) parent = parent->parentWidget();
+    if (parent) {
+        wndPos = parent->pos();
+    }
 }
 
-void WindowDragger::mouseMoveEvent(QMouseEvent *event) {
-  QWidget *parent = parentWidget();
-  if (parent) parent = parent->parentWidget();
-  if (parent) parent = parent->parentWidget();
+void WindowDragger::mouseMoveEvent(QMouseEvent *event)
+{
+    QWidget *parent = parentWidget();
+    if (parent) parent = parent->parentWidget();
+    if (parent) parent = parent->parentWidget();
 
-//  this->setCursor(QCursor(Qt::ArrowCursor));
-  if (parent && mousePressed)
-    parent->move(wndPos + (event->globalPos() - mousePos));
+    if (parent && mousePressed) {
+        parent->move(wndPos + (event->globalPos() - mousePos));
+
+    }
 }
 
 void WindowDragger::mouseReleaseEvent(QMouseEvent *event) {
-  Q_UNUSED(event);
-  mousePressed = false;
+    Q_UNUSED(event);
+    mousePressed = false;
 }
 
 void WindowDragger::mouseDoubleClickEvent(QMouseEvent *event) {
-  Q_UNUSED(event);
-  emit doubleClicked();
+    Q_UNUSED(event);
+    emit doubleClicked();
+}
+
+void WindowDragger::showEvent(QShowEvent *event)
+{
+    this->setAttribute(Qt::WA_Mapped);
+    QWidget::showEvent(event);
 }

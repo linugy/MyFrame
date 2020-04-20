@@ -32,6 +32,7 @@ class WindowDragger : public QWidget {
   void mouseMoveEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
   void mouseDoubleClickEvent(QMouseEvent *event);
+  void showEvent(QShowEvent *event);
 
  protected:
   QPoint mousePos;

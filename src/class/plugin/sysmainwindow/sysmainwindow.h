@@ -27,13 +27,12 @@ public:
     explicit SysMainWindow(const QString &iModuleName, QWidget *parent = nullptr);
     ~SysMainWindow();
 
-public slots:
-
 protected:
     void mousePressEvent(QMouseEvent *event);
 //    void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     virtual bool eventFilter(QObject *obj, QEvent *event);
+    void showEvent(QShowEvent *event);
 
 private slots:
     void onCloseBtnClicked();

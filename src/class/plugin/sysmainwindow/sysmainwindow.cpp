@@ -9,24 +9,21 @@
 #include <QToolBar>
 #include <QPalette>
 #include <QToolButton>
+#include <QStyle>
+#include <QIcon>
 #include "windowdragger.h"
 #include "myquicktoolbar.h"
 #include "myquickbutton.h"
 
-#define MARGIN 5
-#define PADDING 5
+#define MARGIN 1
+#define PADDING 1
 
 SysMainWindow::SysMainWindow(const QString &iModuleName, QWidget *parent)
     : MyClassAbs(parent)
 {
     initModule(iModuleName);
     initUi();
-    // 设值背景色
-//    QPalette pal(this->palette());
-//    pal.setColor(QPalette::Background, QColor("#1E90FF"));
-//    setAutoFillBackground(true);
-//    setPalette(pal);
-
+    setStyleSheet(QString("SysMainWindow{border:solid; border-color:#697d91; border-width:1px;}"));
     setMouseTracking(true);
     QApplication::instance()->installEventFilter(this);
 }
@@ -72,6 +69,12 @@ bool SysMainWindow::eventFilter(QObject *obj, QEvent *event)
     return QWidget::eventFilter(obj, event);
 }
 
+void SysMainWindow::showEvent(QShowEvent *event)
+{
+    this->setAttribute(Qt::WA_Mapped);
+    QMainWindow::showEvent(event);
+}
+
 void SysMainWindow::onCloseBtnClicked()
 {
     this->close();
@@ -87,8 +90,13 @@ void SysMainWindow::initUi()
 
     // 左侧quickToolBar
     mQuickToolBar = new MyQuickToolBar(mMainWidget);
+    mQuickToolBar->setStyleSheet(QString("QToolBar{border:solid; border-color:#D5D5D5; border-width:0px; border-right-width:0px; spacing:0px;padding:0px;background-color:#367fc9;}"));
     mQuickToolBar->setOrientation(Qt::Vertical);
     mainLayout->addWidget(mQuickToolBar);
+    // 添加间隔
+    QWidget *spacingWget = new QWidget(this);
+    spacingWget->setFixedHeight(56);
+    mQuickToolBar->addWidget(spacingWget);
     // 添加多个quickBtn到quickToolBar
     addQuickButtons();
 
@@ -115,11 +123,12 @@ void SysMainWindow::initUi()
 
 void SysMainWindow::addQuickButtons()
 {
-    QToolButton *iconBtn = new QToolButton(mWindowTitleBar);
+    QToolButton *iconBtn = new QToolButton(this);
+    iconBtn->setStyleSheet(QString("QToolButton{background-color: #2f69a2; border:none; margin:0px;}"));
+    iconBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMenuButton)));
     iconBtn->setFixedHeight(50);
     iconBtn->setFixedWidth(50);
-    iconBtn->setText("ICON");
-    mQuickToolBar->addAction(mQuickToolBar->addWidget(iconBtn));
+    iconBtn->move(1, 1);
 
     QVariantList lst;
     QVariantMap m;
@@ -128,6 +137,11 @@ void SysMainWindow::addQuickButtons()
     m.insert("title", "B");
     lst.append(m);
     mQuickToolBar->loadQuickButtons(lst);
+
+    // 添加间隔
+    QWidget *stretcher = new QWidget;
+    stretcher->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    mQuickToolBar->addWidget(stretcher);
 
     QToolButton *sysBtn = new QToolButton(mWindowTitleBar);
     sysBtn->setFixedHeight(50);
