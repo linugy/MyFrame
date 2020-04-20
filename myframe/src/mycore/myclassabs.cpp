@@ -45,7 +45,8 @@ MyClassAbsPrivate::~MyClassAbsPrivate()
 MyClassAbs::MyClassAbs(QWidget *parent)
     : QMainWindow(parent), d_ptr(new MyClassAbsPrivate(this))
 {
-
+    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowSystemMenuHint );
+    setMinimumSize(800, 600);
 }
 
 MyClassAbs::~MyClassAbs()
