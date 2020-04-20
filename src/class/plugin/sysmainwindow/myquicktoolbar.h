@@ -22,6 +22,9 @@ public slots:
     MyQuickButton *addQuickButton(const QVariantMap &iParamMap);
     void clearAllButtons();
 
+protected:
+    void showEvent(QShowEvent *event);
+
 private:
     MyQuickButton *createQuickBtn(const QVariantMap &iParamMap);
 

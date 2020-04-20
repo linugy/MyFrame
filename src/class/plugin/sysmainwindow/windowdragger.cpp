@@ -30,6 +30,11 @@ WindowDragger::WindowDragger(QWidget *parent)
       this->setPalette(pal);
 }
 
+bool WindowDragger::isMousePressed()
+{
+    return mousePressed;
+}
+
 void WindowDragger::mousePressEvent(QMouseEvent *event) {
     mousePressed = true;
     mousePos = event->globalPos();

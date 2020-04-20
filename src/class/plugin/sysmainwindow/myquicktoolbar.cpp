@@ -46,6 +46,12 @@ void MyQuickToolBar::clearAllButtons()
     }
 }
 
+void MyQuickToolBar::showEvent(QShowEvent *event)
+{
+    this->setAttribute(Qt::WA_Mapped);
+    QToolBar::showEvent(event);
+}
+
 MyQuickButton *MyQuickToolBar::createQuickBtn(const QVariantMap &iParamMap)
 {
     MyQuickButton *btn = new MyQuickButton();

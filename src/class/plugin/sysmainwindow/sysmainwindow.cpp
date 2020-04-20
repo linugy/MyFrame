@@ -15,8 +15,10 @@
 #include "myquicktoolbar.h"
 #include "myquickbutton.h"
 
-#define MARGIN 1
-#define PADDING 1
+// padding 略小于 margin,确保形状改变时,鼠标总是在window里
+#define MARGIN 2
+#define PADDING 1.5
+
 
 SysMainWindow::SysMainWindow(const QString &iModuleName, QWidget *parent)
     : MyClassAbs(parent)
@@ -56,14 +58,15 @@ bool SysMainWindow::eventFilter(QObject *obj, QEvent *event)
         QMouseEvent *pMouse = dynamic_cast<QMouseEvent *>(event);
         if (pMouse) {
             QPoint gloPoint = pMouse->globalPos();
-            if(!mMainwindowPressed) {
+            qDebug() << "mMainwindowPressed" << mMainwindowPressed << mWindowTitleBar->isMousePressed();
+            if(!mMainwindowPressed && !mWindowTitleBar->isMousePressed()) {
                 // 如果没有按下，那么就只修改鼠标形状
                 changeCursor(gloPoint);
-            } else {
+            }
+            if (mMainwindowPressed && !mWindowTitleBar->isMousePressed()) {
                 // 如果按下了，那么修改geometry
                 changeGeometry(gloPoint);
             }
-            QWidget::mouseMoveEvent(pMouse);
         }
     }
     return QWidget::eventFilter(obj, event);
@@ -85,12 +88,12 @@ void SysMainWindow::initUi()
     mMainWidget = new QWidget(this);
     setCentralWidget(mMainWidget);
     QHBoxLayout *mainLayout = new QHBoxLayout(mMainWidget);
-    mainLayout->setMargin(MARGIN);
+    mainLayout->setMargin(1);
     mainLayout->setSpacing(0);
 
     // 左侧quickToolBar
     mQuickToolBar = new MyQuickToolBar(mMainWidget);
-    mQuickToolBar->setStyleSheet(QString("QToolBar{border:solid; border-color:#D5D5D5; border-width:0px; border-right-width:0px; spacing:0px;padding:0px;background-color:#367fc9;}"));
+    mQuickToolBar->setStyleSheet(QString("MyQuickToolBar{border:solid; border-color:#697d91; border-width:1px; border-right-width:0px; spacing:0px;padding:0px;background-color:#367fc9;}"));
     mQuickToolBar->setOrientation(Qt::Vertical);
     mainLayout->addWidget(mQuickToolBar);
     // 添加间隔
@@ -104,7 +107,8 @@ void SysMainWindow::initUi()
     QWidget *bodyWidget = new QWidget(mMainWidget);
     mainLayout->addWidget(bodyWidget);
     QVBoxLayout *bodyLayout = new QVBoxLayout(bodyWidget);
-    bodyLayout->setMargin(0);
+//    bodyLayout->setContentsMargins(0, 1, 1, 0);
+    bodyLayout->setMargin(1);
     bodyLayout->setSpacing(0);
 
     // windowBar
@@ -112,7 +116,7 @@ void SysMainWindow::initUi()
     bodyLayout->addWidget(mWindowTitleBar);
     mWindowTitleBar->setFixedHeight(50);
     mWindowTitleLayout = new QHBoxLayout(mWindowTitleBar);
-    mWindowTitleLayout->setMargin(0);
+    mWindowTitleLayout->setMargin(2);
     mWindowTitleLayout->setSpacing(0);
     mWindowTitleLayout->addStretch();
     // 添加多个系统按钮到windowBar
@@ -128,7 +132,7 @@ void SysMainWindow::addQuickButtons()
     iconBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMenuButton)));
     iconBtn->setFixedHeight(50);
     iconBtn->setFixedWidth(50);
-    iconBtn->move(1, 1);
+    iconBtn->move(2, 2);
 
     QVariantList lst;
     QVariantMap m;
@@ -202,7 +206,7 @@ void SysMainWindow::changeCursor(const QPoint &cursorGlobalPoint)
         // 下边
         direction = DOWN;
         this->setCursor(QCursor(Qt::SizeVerCursor));
-    }else {
+    } else {
         // 默认
         direction = NONE;
         this->setCursor(QCursor(Qt::ArrowCursor));

@@ -24,6 +24,9 @@ class WindowDragger : public QWidget {
   explicit WindowDragger(QWidget *parent = Q_NULLPTR);
   virtual ~WindowDragger() {}
 
+public slots:
+    bool isMousePressed();
+
  signals:
   void doubleClicked();
 
