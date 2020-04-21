@@ -36,6 +36,9 @@ protected:
 
 private slots:
     void onCloseBtnClicked();
+    void onMinBtnClicked();
+    void onRestoreBtnClicked();
+    void onMaxBtnClicked();
 
 private:
     void initUi();

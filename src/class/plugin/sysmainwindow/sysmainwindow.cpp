@@ -16,7 +16,7 @@
 #include "myquickbutton.h"
 
 // padding 略小于 margin,确保形状改变时,鼠标总是在window里
-#define MARGIN 2
+#define MARGIN 1
 #define PADDING 1.5
 
 
@@ -58,7 +58,6 @@ bool SysMainWindow::eventFilter(QObject *obj, QEvent *event)
         QMouseEvent *pMouse = dynamic_cast<QMouseEvent *>(event);
         if (pMouse) {
             QPoint gloPoint = pMouse->globalPos();
-            qDebug() << "mMainwindowPressed" << mMainwindowPressed << mWindowTitleBar->isMousePressed();
             if(!mMainwindowPressed && !mWindowTitleBar->isMousePressed()) {
                 // 如果没有按下，那么就只修改鼠标形状
                 changeCursor(gloPoint);
@@ -83,17 +82,35 @@ void SysMainWindow::onCloseBtnClicked()
     this->close();
 }
 
+void SysMainWindow::onMinBtnClicked()
+{
+    setWindowState(Qt::WindowMinimized);
+}
+
+void SysMainWindow::onRestoreBtnClicked()
+{
+    setWindowState(Qt::WindowNoState);
+}
+
+void SysMainWindow::onMaxBtnClicked()
+{
+    setWindowState(Qt::WindowMaximized);
+    showMaximized();
+}
+
 void SysMainWindow::initUi()
 {
     mMainWidget = new QWidget(this);
     setCentralWidget(mMainWidget);
     QHBoxLayout *mainLayout = new QHBoxLayout(mMainWidget);
-    mainLayout->setMargin(1);
+    mainLayout->setMargin(MARGIN);
     mainLayout->setSpacing(0);
 
     // 左侧quickToolBar
     mQuickToolBar = new MyQuickToolBar(mMainWidget);
-    mQuickToolBar->setStyleSheet(QString("MyQuickToolBar{border:solid; border-color:#697d91; border-width:1px; border-right-width:0px; spacing:0px;padding:0px;background-color:#367fc9;}"));
+    mQuickToolBar->setStyleSheet(QString("MyQuickToolBar{border:solid; border-color:#054280;"
+                                         " border-width:1px; border-right-width:0px;"
+                                         " spacing:0px;padding:0px;background-color:#11477e;}"));
     mQuickToolBar->setOrientation(Qt::Vertical);
     mainLayout->addWidget(mQuickToolBar);
     // 添加间隔
@@ -107,8 +124,7 @@ void SysMainWindow::initUi()
     QWidget *bodyWidget = new QWidget(mMainWidget);
     mainLayout->addWidget(bodyWidget);
     QVBoxLayout *bodyLayout = new QVBoxLayout(bodyWidget);
-//    bodyLayout->setContentsMargins(0, 1, 1, 0);
-    bodyLayout->setMargin(1);
+    bodyLayout->setMargin(MARGIN);
     bodyLayout->setSpacing(0);
 
     // windowBar
@@ -116,7 +132,7 @@ void SysMainWindow::initUi()
     bodyLayout->addWidget(mWindowTitleBar);
     mWindowTitleBar->setFixedHeight(50);
     mWindowTitleLayout = new QHBoxLayout(mWindowTitleBar);
-    mWindowTitleLayout->setMargin(2);
+    mWindowTitleLayout->setContentsMargins(5,0,5,5);
     mWindowTitleLayout->setSpacing(0);
     mWindowTitleLayout->addStretch();
     // 添加多个系统按钮到windowBar
@@ -128,7 +144,7 @@ void SysMainWindow::initUi()
 void SysMainWindow::addQuickButtons()
 {
     QToolButton *iconBtn = new QToolButton(this);
-    iconBtn->setStyleSheet(QString("QToolButton{background-color: #2f69a2; border:none; margin:0px;}"));
+    iconBtn->setStyleSheet(QString("QToolButton{background-color:#0c3864; border:none; margin:0px;}"));
     iconBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMenuButton)));
     iconBtn->setFixedHeight(50);
     iconBtn->setFixedWidth(50);
@@ -156,11 +172,36 @@ void SysMainWindow::addQuickButtons()
 
 void SysMainWindow::addSysButtons()
 {
+    // 最小化
+    QPushButton *minBtn = new QPushButton(mWindowTitleBar);
+    minBtn->setStyleSheet(QString("QPushButton{border:none;width:30px;height:30px;border-radius:5px;}"
+                                  "QPushButton:hover{background-color:palette(alternate-base)}"));
+    minBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMinButton)));
+    mWindowTitleLayout->addWidget(minBtn);
+    connect(minBtn, SIGNAL(clicked(bool)), this, SLOT(onMinBtnClicked()));
+
+    // 还原
+    QPushButton *restoreBtn = new QPushButton(mWindowTitleBar);
+    restoreBtn->hide();
+    restoreBtn->setStyleSheet(QString("QPushButton{border:none;width:30px;height:30px;border-radius:5px;}"
+                                      "QPushButton:hover{background-color:palette(alternate-base)}"));
+    restoreBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarNormalButton)));
+    mWindowTitleLayout->addWidget(restoreBtn);
+    connect(restoreBtn, SIGNAL(clicked(bool)), this, SLOT(onRestoreBtnClicked()));
+
+    // 最大化
+    QPushButton *maxBtn = new QPushButton(mWindowTitleBar);
+    maxBtn->setStyleSheet(QString("QPushButton{border:none;width:30px;height:30px;border-radius:5px;}"
+                                  "QPushButton:hover{background-color:palette(alternate-base)}"));
+    maxBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMaxButton)));
+    mWindowTitleLayout->addWidget(maxBtn);
+    connect(maxBtn, SIGNAL(clicked(bool)), this, SLOT(onMaxBtnClicked()));
+
     // 关闭按钮
     QPushButton *closeBtn = new QPushButton(mWindowTitleBar);
-    closeBtn->setFixedHeight(40);
-    closeBtn->setFixedWidth(40);
-    closeBtn->setText("X");
+    closeBtn->setStyleSheet(QString("QPushButton{border:none;width:30px;height:30px;border-radius:5px;}"
+                                    "QPushButton:hover{background-color:palette(alternate-base)}"));
+    closeBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarCloseButton)));
     mWindowTitleLayout->addWidget(closeBtn);
     connect(closeBtn, SIGNAL(clicked(bool)), this, SLOT(onCloseBtnClicked()));
 
