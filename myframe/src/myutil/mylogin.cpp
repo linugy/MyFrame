@@ -1,6 +1,7 @@
 #include "mylogin.h"
 #include <QPushButton>
 #include <mycore/mycore.h>
+#include <mycore/myclassabs.h>
 #include <QDebug>
 
 class MyLoginPrivate

@@ -86,6 +86,15 @@ QWidget* MyClassAbs::getWidgetByName(const QString &iToolBarName)
     return d->mToolBarMap.value(iToolBarName);
 }
 
+QVariant MyClassAbs::config(const QString &iStr)
+{
+    Q_D(MyClassAbs);
+    for (QString var : d->mModuleMap.keys()) {
+        return d->mModuleMap.value(var).toMap().value(iStr);
+    }
+    return QVariant();
+}
+
 /**
 * \brief
 * 当按钮点击后，取出data，然后获取APP.engine，
@@ -252,11 +261,24 @@ QWidget *MyClassAbs::getCurModuleClassPoint(const QAction *action)
     QWidget *obj = action->parentWidget();
     QWidget *objParent = obj->parentWidget();
     qDebug() << "=======objParent======" << objParent->metaObject()->className();
-    while(objParent != nullptr && objParent->metaObject()->className() != "MyClassAbs") {
+    while(objParent != nullptr && !isModuleClass(objParent)) {
         qDebug() << "=======obj=11111=====" << obj->metaObject()->className();
         obj = objParent;
         objParent = objParent->parentWidget();
     }
     qDebug() << "=======obj======" << obj->metaObject()->className();
-    return obj;
+    qDebug() << "=======objParent======" << objParent->metaObject()->className();
+    return objParent;
+}
+
+bool MyClassAbs::isModuleClass(const QWidget *w)
+{
+    QList<MyClassAbs *>classLst = APP->getAllClass();
+    for (MyClassAbs *curClass : classLst) {
+        qDebug() << "for-->>" << curClass->metaObject()->className() << w->metaObject()->className();
+        if (curClass->metaObject()->className() == w->metaObject()->className()) {
+            return true;
+        }
+    }
+    return false;
 }

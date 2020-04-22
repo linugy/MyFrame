@@ -5,6 +5,7 @@
 #include <QScopedPointer>
 #include <QObject>
 #include <mybaseutil/myscriptengine.h>
+#include "myclassabs.h"
 
 #if defined(APP)
 #undef APP
@@ -13,6 +14,7 @@
 
 class MyScriptEngine;
 class MyCorePrivate;
+class MyClassAbs;
 class MYCORESHARED_EXPORT MyCore : public QObject
 {
     Q_OBJECT
@@ -28,15 +30,15 @@ public slots:
     QString readConfig();
     void setModuleUrl(const QString &iModuleUrl);
     QString getModuleUrl();
-    void openModuleUrl(const QString &iModuleUrl);
+    MyClassAbs *openModuleUrl(const QString &iModuleUrl);
 
     MyScriptEngine *scriptEngine();
-
+    QList<MyClassAbs *> getAllClass();
 private slots:
     QString getDllName(const QString &iDllStr);
 
 private:
-    void openModule(const QString &iPluginName, const QString &iClassName, const QString &iModuleName);
+    MyClassAbs *openModule(const QString &iPluginName, const QString &iClassName, const QString &iModuleName);
 
 private:
     MyCore();

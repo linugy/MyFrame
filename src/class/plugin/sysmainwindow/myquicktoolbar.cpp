@@ -4,6 +4,8 @@
 #include <QPalette>
 #include <QPainter>
 #include <QColor>
+#include <QApplication>
+#include <QStyle>
 
 MyQuickToolBar::MyQuickToolBar(QWidget *parent)
     : QToolBar(parent)
@@ -23,9 +25,16 @@ MyQuickToolBar::~MyQuickToolBar()
 
 void MyQuickToolBar::loadQuickButtons(const QVariantList &iVarLst)
 {
-    for (QVariant var: iVarLst) {
-        addQuickButton(var.toMap());
-    }
+//    for (QVariant var: iVarLst) {
+//        QVariantMap m = var.toMap();
+//        if (m.value("type").toString() == "module" || m.value("type").toString() == "menu") {
+//            addQuickButton(var.toMap());
+//        } else if (m.value("type").toString() == "strech") {
+//            QWidget *stretcher = new QWidget;
+//            stretcher->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+//            addWidget(stretcher);
+//        }
+//    }
 }
 
 MyQuickButton *MyQuickToolBar::addQuickButton(const QVariantMap &iParamMap)
@@ -56,5 +65,7 @@ MyQuickButton *MyQuickToolBar::createQuickBtn(const QVariantMap &iParamMap)
 {
     MyQuickButton *btn = new MyQuickButton();
     btn->setText(iParamMap.value("title").toString());
+    btn->setIcon(QApplication::style()->standardIcon(QStyle::StandardPixmap(iParamMap.value("icon").toInt())));
+    btn->setData(iParamMap);
     return btn;
 }

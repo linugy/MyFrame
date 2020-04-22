@@ -8,6 +8,8 @@ class QWidget;
 class QHBoxLayout;
 class WindowDragger;
 class MyQuickToolBar;
+class QPushButton;
+class QStackedWidget;
 
 class SysMainWindow : public MyClassAbs
 {
@@ -39,6 +41,7 @@ private slots:
     void onMinBtnClicked();
     void onRestoreBtnClicked();
     void onMaxBtnClicked();
+    void onQuickButtonClicked();
 
 private:
     void initUi();
@@ -46,6 +49,8 @@ private:
     void addSysButtons();
     void changeCursor(const QPoint &cursorGlobalPoint);
     void changeGeometry(const QPoint &gloPoint);
+    void changeButtonState();
+    void routeModule(const QVariantMap &iMap);
 
 private:
     QWidget *mMainWidget = nullptr;
@@ -55,6 +60,9 @@ private:
     bool mMainwindowPressed= false;
     QPoint dragPosition;
     Direction direction = NONE;
+    QPushButton *restoreBtn = nullptr;
+    QPushButton *maxBtn = nullptr;
+    QStackedWidget *mStackedWidget = nullptr;
 };
 
 #endif // SYSMAINWINDOW_H

@@ -26,6 +26,7 @@ public:
     QMap<QString, QVariantMap> mModuleCfgMap;// module名称对应内容
     QString curModuleUrl;
     MyScriptEngine *mEngine = nullptr;
+    QList<MyClassAbs *> mAllClassLst;// 存放软件中所有打开的模块，为了能够在执行脚本的时候找到this类
 
 protected:
     MyCore * const q_ptr;
@@ -144,14 +145,14 @@ QString MyCore::getModuleUrl()
     return d->curModuleUrl;
 }
 
-void MyCore::openModuleUrl(const QString &iModuleUrl)
+MyClassAbs *MyCore::openModuleUrl(const QString &iModuleUrl)
 {
     // 根据rul或者module对应的配置
     Q_D(MyCore);
     QVariantMap cfgMap = d->mModuleCfgMap.value(iModuleUrl);
 
     // 获取plugin名称和class名称，调用插件的newclass
-    openModule(cfgMap.value("plugin").toString(), cfgMap.value("class").toString(), iModuleUrl);
+    return openModule(cfgMap.value("plugin").toString(), cfgMap.value("class").toString(), iModuleUrl);
 }
 
 MyScriptEngine *MyCore::scriptEngine()
@@ -160,19 +161,29 @@ MyScriptEngine *MyCore::scriptEngine()
     return d->mEngine;
 }
 
+QList<MyClassAbs *> MyCore::getAllClass()
+{
+    Q_D(MyCore);
+    return d->mAllClassLst;
+}
+
 QString MyCore::getDllName(const QString &iDllStr)
 {
     QString dllStr = iDllStr;
     return dllStr.left(dllStr.length() - 5);
 }
 
-void MyCore::openModule(const QString &iPluginName, const QString &iClassName, const QString &iModuleName)
+MyClassAbs *MyCore::openModule(const QString &iPluginName, const QString &iClassName, const QString &iModuleName)
 {
     // 获取插件
     Q_D(MyCore);
+    MyClassAbs *resObj = nullptr;
     QObject * obj = d->mPluginMap.value(iPluginName);
     if (MyClassPluginAbs *interface = qobject_cast<MyClassPluginAbs *>(obj)) {
-        MyClassAbs *obj = interface->newClass(iClassName, iModuleName, QVariantMap());
-        obj->show();
+        resObj = interface->newClass(iClassName, iModuleName, QVariantMap());
+        d->mAllClassLst.append(resObj);
+        resObj->show();
+        return resObj;
     }
+    return resObj;
 }

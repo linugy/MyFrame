@@ -11,6 +11,7 @@
 #include <QToolButton>
 #include <QStyle>
 #include <QIcon>
+#include <QStackedWidget>
 #include "windowdragger.h"
 #include "myquicktoolbar.h"
 #include "myquickbutton.h"
@@ -90,12 +91,24 @@ void SysMainWindow::onMinBtnClicked()
 void SysMainWindow::onRestoreBtnClicked()
 {
     setWindowState(Qt::WindowNoState);
+    changeButtonState();
 }
 
 void SysMainWindow::onMaxBtnClicked()
 {
     setWindowState(Qt::WindowMaximized);
     showMaximized();
+    changeButtonState();
+}
+
+void SysMainWindow::onQuickButtonClicked()
+{
+    if (MyQuickButton *btn = qobject_cast<MyQuickButton *>(sender())) {
+        QVariantMap config = btn->getData().toMap();
+        if (config.value("type").toString() == "module") {
+            routeModule(config);
+        }
+    }
 }
 
 void SysMainWindow::initUi()
@@ -138,6 +151,8 @@ void SysMainWindow::initUi()
     // 添加多个系统按钮到windowBar
     addSysButtons();
 
+    mStackedWidget = new QStackedWidget(bodyWidget);
+    bodyLayout->addWidget(mStackedWidget);
     bodyLayout->addStretch();
 }
 
@@ -150,24 +165,18 @@ void SysMainWindow::addQuickButtons()
     iconBtn->setFixedWidth(50);
     iconBtn->move(2, 2);
 
-    QVariantList lst;
-    QVariantMap m;
-    m.insert("title", "A");
-    lst.append(m);
-    m.insert("title", "B");
-    lst.append(m);
-    mQuickToolBar->loadQuickButtons(lst);
-
-    // 添加间隔
-    QWidget *stretcher = new QWidget;
-    stretcher->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    mQuickToolBar->addWidget(stretcher);
-
-    QToolButton *sysBtn = new QToolButton(mWindowTitleBar);
-    sysBtn->setFixedHeight(50);
-    sysBtn->setFixedWidth(50);
-    sysBtn->setText("SYS");
-    mQuickToolBar->addAction(mQuickToolBar->addWidget(sysBtn));
+    QVariantList desktopLst = config("desktop").toList();
+    for (QVariant var: desktopLst) {
+        QVariantMap m = var.toMap();
+        if (m.value("type").toString() == "module" || m.value("type").toString() == "menu") {
+            MyQuickButton *btn = mQuickToolBar->addQuickButton(var.toMap());
+            connect(btn, SIGNAL(clicked(bool)), this, SLOT(onQuickButtonClicked()));
+        } else if (m.value("type").toString() == "strech") {
+            QWidget *stretcher = new QWidget;
+            stretcher->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+            mQuickToolBar->addWidget(stretcher);
+        }
+    }
 }
 
 void SysMainWindow::addSysButtons()
@@ -181,7 +190,7 @@ void SysMainWindow::addSysButtons()
     connect(minBtn, SIGNAL(clicked(bool)), this, SLOT(onMinBtnClicked()));
 
     // 还原
-    QPushButton *restoreBtn = new QPushButton(mWindowTitleBar);
+    restoreBtn = new QPushButton(mWindowTitleBar);
     restoreBtn->hide();
     restoreBtn->setStyleSheet(QString("QPushButton{border:none;width:30px;height:30px;border-radius:5px;}"
                                       "QPushButton:hover{background-color:palette(alternate-base)}"));
@@ -190,7 +199,7 @@ void SysMainWindow::addSysButtons()
     connect(restoreBtn, SIGNAL(clicked(bool)), this, SLOT(onRestoreBtnClicked()));
 
     // 最大化
-    QPushButton *maxBtn = new QPushButton(mWindowTitleBar);
+    maxBtn = new QPushButton(mWindowTitleBar);
     maxBtn->setStyleSheet(QString("QPushButton{border:none;width:30px;height:30px;border-radius:5px;}"
                                   "QPushButton:hover{background-color:palette(alternate-base)}"));
     maxBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMaxButton)));
@@ -309,5 +318,24 @@ void SysMainWindow::changeGeometry(const QPoint &gloPoint)
             break;
         }
         this->setGeometry(rMove);
+    }
+}
+
+void SysMainWindow::changeButtonState()
+{
+    if (this->isMaximized()) {
+        restoreBtn->show();
+        maxBtn->hide();
+    } else {
+        restoreBtn->hide();
+        maxBtn->show();
+    }
+}
+
+void SysMainWindow::routeModule(const QVariantMap &iMap)
+{
+    QString moduleUrl = iMap.value("url").toString();
+    if (!moduleUrl.isEmpty()) {
+        mStackedWidget->addWidget(APP->openModuleUrl(moduleUrl));
     }
 }

@@ -2,6 +2,7 @@
 #define MYCLASSABS_H
 
 #include <QMainWindow>
+#include <QVariant>
 #include "mycore_global.h"
 
 class MyClassAbsPrivate;
@@ -17,6 +18,7 @@ signals:
 public slots:
     void initModule(const QString &iModuleName);
     QWidget *getWidgetByName(const QString &iToolBarName);
+    QVariant config(const QString &iStr);
 
 private slots:
     void onBtnClicked();
@@ -29,6 +31,7 @@ private:
     void initActionFunctionMap(const QString &iModuleName);
     void initButtons();
     QWidget *getCurModuleClassPoint(const QAction *action);
+    bool isModuleClass(const QWidget *w);
 
 protected:
     const QScopedPointer<MyClassAbsPrivate> d_ptr;
