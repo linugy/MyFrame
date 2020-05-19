@@ -8,8 +8,12 @@ class QWidget;
 class QHBoxLayout;
 class WindowDragger;
 class MyQuickToolBar;
+class MyQuickButton;
 class QPushButton;
 class QStackedWidget;
+class MyPanelMenu;
+class QFrame;
+class MyStretchFrame;
 
 class SysMainWindow : public MyClassAbs
 {
@@ -51,6 +55,7 @@ private:
     void changeGeometry(const QPoint &gloPoint);
     void changeButtonState();
     void routeModule(const QVariantMap &iMap);
+    void movePanelMenuWidget();
 
 private:
     QWidget *mMainWidget = nullptr;
@@ -63,6 +68,9 @@ private:
     QPushButton *restoreBtn = nullptr;
     QPushButton *maxBtn = nullptr;
     QStackedWidget *mStackedWidget = nullptr;
+    MyPanelMenu *mPanelMenu = nullptr;
+    MyStretchFrame *mPopupWidget = nullptr;
+    MyQuickButton *mCurrentActiveQuickBtn = nullptr;
 };
 
 #endif // SYSMAINWINDOW_H
