@@ -82,7 +82,6 @@ void MyClassAbs::initModule(const QString &iModuleName)
 QWidget* MyClassAbs::getWidgetByName(const QString &iToolBarName)
 {
     Q_D(MyClassAbs);
-    qDebug() << d->mToolBarMap;
     return d->mToolBarMap.value(iToolBarName);
 }
 
@@ -104,16 +103,7 @@ void MyClassAbs::onBtnClicked()
 {
     if (QAction *action = qobject_cast<QAction *>(sender())) {
         QString funcStr = action->data().toString();
-        qDebug() << "action==========" << funcStr;
         QWidget *curModule = getCurModuleClassPoint(action);
-        qDebug() << "--------------------------" << curModule;
-//        APP->scriptEngine()->evaluate(QString("function run(){") + funcStr + "}");
-//        qDebug() << "==========1111" << QString("function run(){") + funcStr + "}";
-//        QScriptValue object = APP->scriptEngine()->globalObject();
-//        QScriptValue func = object.property("run");
-//        func.call(APP->scriptEngine()->newQObject(curModule));
-
-
         QString runStr = QString("function run(){") + funcStr + "}";
         QScriptContext *content = APP->scriptEngine()->pushContext();
         content->engine()->evaluate(runStr);
@@ -147,9 +137,7 @@ void MyClassAbs::initUimMap(const QString &iModuleName)
 {
     Q_D(MyClassAbs);
     QDir moduleUrl(APP->getModulePath());// "../../../src/module/DEMO/"
-    qDebug() << "=====" << APP->getModulePath();
     QString uimPath = moduleUrl.absolutePath() + "/" + iModuleName + "/uim.conf";
-    qDebug() << "-------uimPath----" << uimPath;
     QFile file(uimPath);
     if (!file.open( QIODevice::ReadWrite)) {
         return;
@@ -160,7 +148,6 @@ void MyClassAbs::initUimMap(const QString &iModuleName)
 
     if (!jsonDocument.isNull() && jsonParserError.error == QJsonParseError::NoError) {
         QVariantMap m = jsonDocument.toVariant().toMap();
-        qDebug() << "-----jsonDocument-----" << m;
         d->mUimMap = m;
     }
 }
@@ -176,14 +163,11 @@ void MyClassAbs::initActionConfMap(const QString &iModuleName)
     Q_D(MyClassAbs);
     QDir moduleUrl(APP->getModulePath());// "../../../src/module/DEMO/"
     QString actionsPath = moduleUrl.absolutePath() + "/" + iModuleName + "/actions/";
-    qDebug() << "------initActionConfMap-------" << actionsPath;
     QDir actionsDir(actionsPath);
     foreach (QFileInfo fileName, actionsDir.entryInfoList(QDir::Files)) {
-        qDebug() << "------fileName--" << fileName.fileName() << fileName.absolutePath();
         if (!fileName.fileName().endsWith("_conf.conf")) {
             continue;
         }
-        qDebug() <<"11111111" << fileName.filePath();
         QFile file(fileName.filePath());
         if (!file.open( QIODevice::ReadWrite)) {
             return;
@@ -198,7 +182,6 @@ void MyClassAbs::initActionConfMap(const QString &iModuleName)
             d->mActionConfMap.insert(tmpName.left(tmpName.length() - 10), m);
         }
     }
-    qDebug() << "--------mActionConfMap------" << d->mActionConfMap;
 }
 
 void MyClassAbs::initActionFunctionMap(const QString &iModuleName)
@@ -220,7 +203,6 @@ void MyClassAbs::initActionFunctionMap(const QString &iModuleName)
         // 去掉后缀
         d->mAciontFunctionMap.insert(tmpName.left(tmpName.length() - 3), functionStr);
     }
-    qDebug() << "--------mAciontFunctionMap------" << d->mAciontFunctionMap;
 }
 
 /**
@@ -260,14 +242,10 @@ QWidget *MyClassAbs::getCurModuleClassPoint(const QAction *action)
 {
     QWidget *obj = action->parentWidget();
     QWidget *objParent = obj->parentWidget();
-    qDebug() << "=======objParent======" << objParent->metaObject()->className();
     while(objParent != nullptr && !isModuleClass(objParent)) {
-        qDebug() << "=======obj=11111=====" << obj->metaObject()->className();
         obj = objParent;
         objParent = objParent->parentWidget();
     }
-    qDebug() << "=======obj======" << obj->metaObject()->className();
-    qDebug() << "=======objParent======" << objParent->metaObject()->className();
     return objParent;
 }
 
@@ -275,7 +253,6 @@ bool MyClassAbs::isModuleClass(const QWidget *w)
 {
     QList<MyClassAbs *>classLst = APP->getAllClass();
     for (MyClassAbs *curClass : classLst) {
-        qDebug() << "for-->>" << curClass->metaObject()->className() << w->metaObject()->className();
         if (curClass->metaObject()->className() == w->metaObject()->className()) {
             return true;
         }

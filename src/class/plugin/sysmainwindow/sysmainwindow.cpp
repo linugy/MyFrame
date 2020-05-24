@@ -16,8 +16,6 @@
 #include "windowdragger.h"
 #include "myquicktoolbar.h"
 #include "myquickbutton.h"
-#include "mypanelmenu.h"
-#include "mystretchframe.h"
 
 // padding 略小于 margin,确保形状改变时,鼠标总是在window里
 #define MARGIN 1
@@ -110,20 +108,7 @@ void SysMainWindow::onQuickButtonClicked()
         QVariantMap config = btn->getData().toMap();
         if (config.value("type").toString() == "module") {
             routeModule(config);
-        } else if (config.value("type").toString() == "menu") {
-            movePanelMenuWidget();
-            if (mCurrentActiveQuickBtn == btn) {
-                // 若是同一个
-                mPopupWidget->setVisible(!mPopupWidget->isVisible());
-            } else {
-                // 不是同一个
-                if (!mPopupWidget->isVisible()) {
-                    mPopupWidget->setVisible(true);
-                }
-            }
-//            updatePopupWidget(iBtn, iConfigVar, type);
         }
-        mCurrentActiveQuickBtn = btn;
     }
 }
 
@@ -148,20 +133,6 @@ void SysMainWindow::initUi()
     mQuickToolBar->addWidget(spacingWget);
     // 添加多个quickBtn到quickToolBar
     addQuickButtons();
-
-    // menu
-    mPopupWidget = new MyStretchFrame(this);
-    mPopupWidget->setMinimumWidth(200);
-    mPopupWidget->setMaximumWidth(300);
-    mPopupWidget->resize(200, mPopupWidget->height());
-    mPopupWidget->setVisible(false);
-
-    QVBoxLayout *panelMenuMainLayout = new QVBoxLayout(mPopupWidget);
-    panelMenuMainLayout->setMargin(0);
-    panelMenuMainLayout->setSpacing(0);
-    mPanelMenu = new MyPanelMenu(this);
-    connect(mPanelMenu, SIGNAL(clicked(QVariant)), this, SLOT(onPanelMenuClicked(QVariant)));
-    panelMenuMainLayout->addWidget(mPanelMenu);
 
     // 右侧主界面
     QWidget *bodyWidget = new QWidget(mMainWidget);
@@ -367,24 +338,5 @@ void SysMainWindow::routeModule(const QVariantMap &iMap)
     QString moduleUrl = iMap.value("url").toString();
     if (!moduleUrl.isEmpty()) {
         mStackedWidget->addWidget(APP->openModuleUrl(moduleUrl));
-    }
-}
-
-void SysMainWindow::movePanelMenuWidget()
-{
-    if (mPopupWidget != nullptr) {
-        auto geometry = this->geometry();
-        QRect rect(geometry.x() + mQuickToolBar->width(),
-                   geometry.y(),
-                   mPopupWidget->width(),
-                   geometry.height());
-
-        if (!this->isMaximized()) {
-            auto frameGeometry = this->frameGeometry();
-            rect.setX(0 + mQuickToolBar->width());
-            rect.setY(1);
-            rect.setHeight(frameGeometry.height() - 3);
-        }
-        mPopupWidget->setGeometry(rect);
     }
 }

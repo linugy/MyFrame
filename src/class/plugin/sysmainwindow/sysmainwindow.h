@@ -11,9 +11,7 @@ class MyQuickToolBar;
 class MyQuickButton;
 class QPushButton;
 class QStackedWidget;
-class MyPanelMenu;
 class QFrame;
-class MyStretchFrame;
 
 class SysMainWindow : public MyClassAbs
 {
@@ -35,7 +33,6 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-//    void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     virtual bool eventFilter(QObject *obj, QEvent *event);
     void showEvent(QShowEvent *event);
@@ -55,7 +52,6 @@ private:
     void changeGeometry(const QPoint &gloPoint);
     void changeButtonState();
     void routeModule(const QVariantMap &iMap);
-    void movePanelMenuWidget();
 
 private:
     QWidget *mMainWidget = nullptr;
@@ -68,9 +64,6 @@ private:
     QPushButton *restoreBtn = nullptr;
     QPushButton *maxBtn = nullptr;
     QStackedWidget *mStackedWidget = nullptr;
-    MyPanelMenu *mPanelMenu = nullptr;
-    MyStretchFrame *mPopupWidget = nullptr;
-    MyQuickButton *mCurrentActiveQuickBtn = nullptr;
 };
 
 #endif // SYSMAINWINDOW_H
