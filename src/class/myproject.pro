@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    main \
-    plugin
+    misc \
+    plugin \
+    main
 
 CONFIG += ordered

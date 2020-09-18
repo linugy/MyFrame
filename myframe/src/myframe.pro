@@ -5,7 +5,7 @@ CONFIG += ordered
 
 SUBDIRS += \
     mybaseutil \
+    mywidget \
     mycore \
     mydatabaseutil \
-    myutil \
-    mywidget
+    myutil
