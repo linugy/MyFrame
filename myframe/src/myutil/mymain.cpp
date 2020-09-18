@@ -18,9 +18,10 @@ int MyMain::appExec(int argc, char *argv[])
     QApplication a(argc, argv);
     QVariantMap argsMap = parseArgs(a);
     int ret = run(argsMap);
-    if (ret == 0){
+    if (ret == 1){
         return a.exec();
     } else {
+        a.quit();
         return ret;
     }
 }
@@ -66,7 +67,5 @@ int MyMain::run(const QVariantMap &iArgsMap)
     MyLogin login;
     login.setModuleUrl(productUrl);
     login.setModuleTitle("Test");
-    login.exec();
-
-    return 0;
+    return login.exec();
 }

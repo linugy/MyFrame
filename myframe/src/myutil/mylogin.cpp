@@ -1,7 +1,12 @@
 #include "mylogin.h"
+#include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <mycore/mycore.h>
 #include <mycore/myclassabs.h>
+#include <mywidget/mylogindialog.h>
 #include <QDebug>
 
 class MyLoginPrivate
@@ -15,6 +20,7 @@ protected:
     MyLogin *const q_ptr;
 
 private:
+    MyLoginDialog *loginDilog;
     QPushButton *loginBtn;
     QString curModuleUrl;
 };
@@ -72,8 +78,8 @@ QString MyLogin::getModuleUrl()
 void MyLogin::initUi()
 {
     Q_D(MyLogin);
-    d->loginBtn = new QPushButton(this);
-    d->loginBtn->setText("login");
-
-    connect(d->loginBtn, SIGNAL(clicked()), this, SLOT(loginVerify()));
+    d->loginDilog = new MyLoginDialog(this);
+    if (d->loginBtn = qobject_cast<QPushButton *>(d->loginDilog->loginBtn())) {
+        connect(d->loginBtn, SIGNAL(clicked()), this, SLOT(loginVerify()));
+    }
 }

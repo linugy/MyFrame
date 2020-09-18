@@ -14,10 +14,12 @@ TEMPLATE = lib
 
 DEFINES += MYWIDGET_LIBRARY
 
-SOURCES += mywidget.cpp
+SOURCES += mywidget.cpp \
+    mylogindialog.cpp
 
 HEADERS += mywidget.h\
-        mywidget_global.h
+        mywidget_global.h \
+    mylogindialog.h
 
 unix {
     target.path = /usr/lib
