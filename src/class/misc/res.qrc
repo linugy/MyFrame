@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/my">
+        <file>icon/erp.svg</file>
+    </qresource>
+</RCC>

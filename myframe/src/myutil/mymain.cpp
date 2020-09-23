@@ -9,6 +9,7 @@
 #include "mylogin.h"
 #include <mywidget/mywidget.h>
 #include <mybaseutil/myscriptengine.h>
+#include <QResource>
 
 /**
 * \brief main
@@ -16,6 +17,7 @@
 int MyMain::appExec(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QResource::registerResource("../resource/res/my.rcc");
     QVariantMap argsMap = parseArgs(a);
     int ret = run(argsMap);
     if (ret == 1){

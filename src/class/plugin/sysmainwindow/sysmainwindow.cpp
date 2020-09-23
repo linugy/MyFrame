@@ -160,8 +160,9 @@ void SysMainWindow::initUi()
 void SysMainWindow::addQuickButtons()
 {
     QToolButton *iconBtn = new QToolButton(this);
-    iconBtn->setStyleSheet(QString("QToolButton{background-color:#0c3864; border:none; margin:0px;}"));
-    iconBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMenuButton)));
+    iconBtn->setStyleSheet(QString("QToolButton{background-color:#0c3864; border:none; margin:0px;border-image:url(:/my/icon/erp.svg)}"));
+//    iconBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMenuButton)));
+//    iconBtn->setIcon(QIcon(":/my/icon/erp.svg"));
     iconBtn->setFixedHeight(50);
     iconBtn->setFixedWidth(50);
     iconBtn->move(2, 2);
