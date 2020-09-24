@@ -64,18 +64,18 @@ void MyLoginDialog::initUi()
     vLayout->addWidget(d->username);
     d->username->setFixedSize(200, 30);
     d->username->setFont(QFont("Timers", 16));
-    d->username->setPlaceholderText("username");
+    d->username->setPlaceholderText(tr("username"));
 
     d->password = new QLineEdit(this);
     vLayout->addWidget(d->password);
     d->password->setFont(QFont("Timers", 16));
     d->password->setFixedSize(200, 30);
-    d->password->setPlaceholderText("password");
+    d->password->setPlaceholderText(tr("password"));
 
     d->loginBtn = new QPushButton(this);
     vLayout->addWidget(d->loginBtn);
     d->loginBtn->setFixedWidth(200);
-    d->loginBtn->setText("login");
+    d->loginBtn->setText(tr("login"));
     vLayout->addStretch(1);
 
     hLayout->addStretch(1);

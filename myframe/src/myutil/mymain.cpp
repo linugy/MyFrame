@@ -10,6 +10,7 @@
 #include <mywidget/mywidget.h>
 #include <mybaseutil/myscriptengine.h>
 #include <QResource>
+#include <QTranslator>
 
 /**
 * \brief main
@@ -17,6 +18,19 @@
 int MyMain::appExec(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QDir qmDir(QApplication::applicationDirPath());
+    qmDir.cdUp();
+    qmDir.cd("language");
+    foreach (QFileInfo file, qmDir.entryInfoList(QDir::Files)) {
+        if (file.suffix() == "qm") {
+            QTranslator *translator = new QTranslator;
+            if (translator->load(file.absoluteFilePath())) {
+                a.installTranslator(translator);
+            }
+        }
+    }
+
     QResource::registerResource("../resource/res/my.rcc");
     QVariantMap argsMap = parseArgs(a);
     int ret = run(argsMap);
