@@ -32,3 +32,8 @@ MyWidget::~MyWidget()
 {
 
 }
+
+void MyWidget::setSize(int width, int height)
+{
+    this->resize(width, height);
+}

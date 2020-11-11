@@ -103,12 +103,14 @@ void MyClassAbs::onBtnClicked()
 {
     if (QAction *action = qobject_cast<QAction *>(sender())) {
         QString funcStr = action->data().toString();
+        // 获取当前打开模块的指针，从而可以在脚本中使用共有槽函数
         QWidget *curModule = getCurModuleClassPoint(action);
         QString runStr = QString("function run(){") + funcStr + "}";
         QScriptContext *content = APP->scriptEngine()->pushContext();
         content->engine()->evaluate(runStr);
         QScriptValue object = content->activationObject();
         QScriptValue func = object.property("run");
+        // 执行action的内容时，将当前当前模块指针传入
         func.call(content->engine()->newQObject(curModule));
         APP->scriptEngine()->popContext();
     }
@@ -222,8 +224,11 @@ void MyClassAbs::initButtons()
                     QString actionName = m.value("action").toString();
                     // 根据actionName获取配置
                     QVariantMap actionConfMap = d->mActionConfMap.value(actionName).toMap();
+                    // 通过配置获取到按钮的label
                     QAction *action = new QAction(actionConfMap.value("label").toString(), toolBar);
+                    // 按钮中存放执行内容
                     action->setData(d->mAciontFunctionMap.value(actionName).toString());
+                    // 关联信号
                     connect(action, SIGNAL(triggered(bool)), this, SLOT(onBtnClicked()));
                     toolBar->addAction(action);
                 }
@@ -249,6 +254,9 @@ QWidget *MyClassAbs::getCurModuleClassPoint(const QAction *action)
     return objParent;
 }
 
+/**
+* \brief 所有打开的模块中，是否有当前传入的widget
+*/
 bool MyClassAbs::isModuleClass(const QWidget *w)
 {
     QList<MyClassAbs *>classLst = APP->getAllClass();

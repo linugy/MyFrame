@@ -16,6 +16,10 @@ public:
 
 public slots:
     QPushButton *loginBtn();
+    void setUserName(const QString &iUserName);
+    QString getUserName();
+    void setPassword(const QString &iPassword);
+    QString getPassword();
 
 protected:
     const QScopedPointer<MyLoginDialogPrivate> d_ptr;

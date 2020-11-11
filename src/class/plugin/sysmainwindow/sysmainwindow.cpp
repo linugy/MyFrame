@@ -12,6 +12,7 @@
 #include <QStyle>
 #include <QIcon>
 #include <QStackedWidget>
+#include <QTabBar>
 #include <mycore/mycore.h>
 #include "windowdragger.h"
 #include "myquicktoolbar.h"
@@ -112,6 +113,15 @@ void SysMainWindow::onQuickButtonClicked()
     }
 }
 
+void SysMainWindow::onTabCloseRequested(int index)
+{
+    mTabBar->removeTab(index);
+    QWidget *curWidget = mStackedWidget->widget(index);
+    mStackedWidget->removeWidget(curWidget);
+    delete curWidget;
+    curWidget = nullptr;
+}
+
 void SysMainWindow::initUi()
 {
     mMainWidget = new QWidget(this);
@@ -146,11 +156,20 @@ void SysMainWindow::initUi()
     bodyLayout->addWidget(mWindowTitleBar);
     mWindowTitleBar->setFixedHeight(50);
     mWindowTitleLayout = new QHBoxLayout(mWindowTitleBar);
-    mWindowTitleLayout->setContentsMargins(5,0,5,5);
+    mWindowTitleLayout->setMargin(0);
     mWindowTitleLayout->setSpacing(0);
     mWindowTitleLayout->addStretch();
     // 添加多个系统按钮到windowBar
     addSysButtons();
+
+    // 添加QTabBar
+    QVBoxLayout *tabBarLayout = new QVBoxLayout();
+    tabBarLayout->addStretch(1);
+    mTabBar = new QTabBar();
+    connect(mTabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(onTabCloseRequested(int)));
+    tabBarLayout->addWidget(mTabBar);
+    mWindowTitleLayout->insertLayout(0, tabBarLayout);
+    mTabBar->setTabsClosable(true);
 
     mStackedWidget = new QStackedWidget(bodyWidget);
     bodyLayout->addWidget(mStackedWidget);
@@ -161,8 +180,6 @@ void SysMainWindow::addQuickButtons()
 {
     QToolButton *iconBtn = new QToolButton(this);
     iconBtn->setStyleSheet(QString("QToolButton{background-color:#0c3864; border:none; margin:0px;border-image:url(:/my/icon/erp.svg)}"));
-//    iconBtn->setIcon(QApplication::style()->standardIcon((QStyle::SP_TitleBarMenuButton)));
-//    iconBtn->setIcon(QIcon(":/my/icon/erp.svg"));
     iconBtn->setFixedHeight(50);
     iconBtn->setFixedWidth(50);
     iconBtn->move(2, 2);
@@ -339,5 +356,6 @@ void SysMainWindow::routeModule(const QVariantMap &iMap)
     QString moduleUrl = iMap.value("url").toString();
     if (!moduleUrl.isEmpty()) {
         mStackedWidget->addWidget(APP->openModuleUrl(moduleUrl));
+        mTabBar->addTab(iMap.value("text").toString());
     }
 }

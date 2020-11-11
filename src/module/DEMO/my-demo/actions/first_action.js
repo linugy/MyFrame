@@ -1,3 +1,4 @@
-print("--11111---", "11111111");
-var widget = new MyWidget;
+print("---test_first_action---");
+var widget = new MyWidget;// 测试在脚本中使用自定义控件
+widget.setSize(200, 200);
 widget.show();

@@ -19,7 +19,7 @@ SysUserMgt::SysUserMgt(const QString &iModuleName, QWidget *parent)
     QVBoxLayout *mLayout = new QVBoxLayout(mWidget);
     mLayout->setMargin(0);
     mLayout->setSpacing(0);
-    if (QToolBar *toolbar = qobject_cast<QToolBar*>(getWidgetByName("MainToolBar"))) {
+    if (QToolBar *toolbar = qobject_cast<QToolBar*>(getWidgetByName("TOOLBAR"))) {
         mLayout->addWidget(toolbar);
     }
     mWidget->setLayout(mLayout);
@@ -35,6 +35,6 @@ SysUserMgt::~SysUserMgt()
 
 QString SysUserMgt::getCurText()
 {
-    return "OKKK";
+    return "Test Title";
 }
 

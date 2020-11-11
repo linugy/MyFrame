@@ -12,12 +12,11 @@ class MYUTILSHARED_EXPORT MyLogin : public QDialog
 public:
     explicit MyLogin(QWidget *parent = 0);
     ~MyLogin();
+
 public slots:
     bool loginVerify();
-    void setModuleTitle(const QString &iTitle);
-
-    void setModuleUrl(const QString &iUrl);
-    QString getModuleUrl();
+    void setUserName(const QString &iUserName);
+    void setPassword(const QString &iPassword);
 
 private slots:
     void initUi();

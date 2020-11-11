@@ -35,8 +35,7 @@ MyScriptEngine::~MyScriptEngine()
 
 QScriptValue MyScriptEngine::importPackage(QScriptContext *iContext, QScriptEngine *iEngine)
 {
-    for (int i = 0; i < iContext->argumentCount(); ++i)
-    {
+    for (int i = 0; i < iContext->argumentCount(); ++i) {
         QString pkg = iContext->argument(i).toString();
         if (iEngine->availableExtensions().contains(pkg)
                 && !iEngine->importedExtensions().contains(pkg))

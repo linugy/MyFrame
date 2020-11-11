@@ -21,7 +21,7 @@ public:
     ~MyCorePrivate();
 public:
     QString mPluginPath;
-    QMap<QString, QObject*> mPluginMap;// dll名称对应插件
+    QMap<QString, QObject*> mPluginMap;// 插件名称对应内容
     QString mModuleCfgPath;
     QMap<QString, QVariantMap> mModuleCfgMap;// module名称对应内容
     QString curModuleUrl;

@@ -13,6 +13,9 @@ public:
     explicit MyWidget(QWidget *parent = nullptr);
     ~MyWidget();
 
+public slots:
+    void setSize(int width, int height);
+
 protected:
     const QScopedPointer<MyWidgetPrivate> d_ptr;
 

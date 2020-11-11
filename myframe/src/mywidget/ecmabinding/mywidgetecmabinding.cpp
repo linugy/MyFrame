@@ -10,8 +10,7 @@ QScriptValue constructMyWidget(QScriptContext *iContext, QScriptEngine *iEngine)
 {
     Q_UNUSED(iEngine);
 
-    if (iContext->argumentCount() == 0)
-    {
+    if (iContext->argumentCount() == 0) {
         return iContext->engine()->newQObject(iContext->thisObject(), new MyWidget(), QScriptEngine::AutoOwnership);
     }
     return QScriptValue();

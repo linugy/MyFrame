@@ -50,6 +50,30 @@ QPushButton *MyLoginDialog::loginBtn()
     return d->loginBtn;
 }
 
+void MyLoginDialog::setUserName(const QString &iUserName)
+{
+    Q_D(MyLoginDialog);
+    d->username->setText(iUserName);
+}
+
+QString MyLoginDialog::getUserName()
+{
+    Q_D(MyLoginDialog);
+    return d->username->text();
+}
+
+void MyLoginDialog::setPassword(const QString &iPassword)
+{
+    Q_D(MyLoginDialog);
+    d->password->setText(iPassword);
+}
+
+QString MyLoginDialog::getPassword()
+{
+    Q_D(MyLoginDialog);
+    return d->password->text();
+}
+
 void MyLoginDialog::initUi()
 {
     Q_D(MyLoginDialog);

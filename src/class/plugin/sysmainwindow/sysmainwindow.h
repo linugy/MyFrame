@@ -11,6 +11,7 @@ class MyQuickToolBar;
 class MyQuickButton;
 class QPushButton;
 class QStackedWidget;
+class QTabBar;
 class QFrame;
 
 class SysMainWindow : public MyClassAbs
@@ -43,6 +44,7 @@ private slots:
     void onRestoreBtnClicked();
     void onMaxBtnClicked();
     void onQuickButtonClicked();
+    void onTabCloseRequested(int index);
 
 private:
     void initUi();
@@ -63,6 +65,7 @@ private:
     Direction direction = NONE;
     QPushButton *restoreBtn = nullptr;
     QPushButton *maxBtn = nullptr;
+    QTabBar *mTabBar = nullptr;
     QStackedWidget *mStackedWidget = nullptr;
 };
 
