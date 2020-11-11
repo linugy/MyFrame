@@ -25,32 +25,30 @@ HEADERS += myutil.h\
     mymain.h \
     mylogin.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+SDKPATH = $$PWD/../../../dist/qt5.6.3-win32-msvc2015
 
-
-### 查看SDK头文件目标路径是否存在，不存在则创建
-SDK_HEADER_PATH = $$system_path($$PWD/../../../dist/qt5.6.3-win32-msvc2015/include/myutil)
+# 查看SDK头文件目标路径是否存在，不存在则创建
+SDK_HEADER_PATH = $$system_path($${SDKPATH}/include/myutil)
 !exists($${SDK_HEADER_PATH}) {
     mkpath($${SDK_HEADER_PATH})
 }
 
-### 拷贝头文件
+# 拷贝头文件
 system(copy *.h $${SDK_HEADER_PATH})
 
-### 包含头文件
-SDKPATH = $$PWD/../../../dist/qt5.6.3-win32-msvc2015
-message($$SDKPATH)
+# 包含头文件
 INCLUDEPATH += $${SDKPATH}/include
 
-### 包含dll
+dest_dir = $${SDKPATH}/bin_dbg
+
+LIB_LIST = mycore mybaseutil mywidget
+
 win32 {
     DEBUG_SUFFIX = d
 }
-LIB_LIST = mycore mybaseutil mywidget
-LIBS += -L$$DESTDIR
+
+LIBS = -L$$dest_dir
+
 for (lib, LIB_LIST) {
     LIBS += -l$${lib}$${DEBUG_SUFFIX}
 }

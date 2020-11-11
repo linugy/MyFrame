@@ -61,6 +61,7 @@ bool MyLogin::loginVerify()
 
 void MyLogin::setModuleTitle(const QString &iTitle)
 {
+    Q_UNUSED(iTitle);
 }
 
 void MyLogin::setModuleUrl(const QString &iUrl)

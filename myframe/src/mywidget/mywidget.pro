@@ -4,5 +4,4 @@ SUBDIRS += \
     lib \
     ecmabinding
 
-
 CONFIG += ordered

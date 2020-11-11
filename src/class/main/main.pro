@@ -18,21 +18,21 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
 
-# sdk path
 SDKPATH = $$PWD/../../../dist/qt5.6.3-win32-msvc2015
 
-# include headers
+# 包含头文件
 INCLUDEPATH += $${SDKPATH}/include
 
-# debug suffix
+dest_dir = $${SDKPATH}/bin_dbg
+
+LIB_LIST = mycore myutil
+
 win32 {
     DEBUG_SUFFIX = d
 }
 
-LIB_LIST = mycore myutil
+LIBS = -L$$dest_dir
 
-# libs
-LIBS += -L$$DESTDIR
 for (lib, LIB_LIST) {
     LIBS += -l$${lib}$${DEBUG_SUFFIX}
 }

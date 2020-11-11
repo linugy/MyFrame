@@ -18,35 +18,26 @@ SOURCES += plugin.cpp
 
 HEADERS += plugin.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
 include (./sysusermgt/sysusermgt.pri)
 include (./sysmainwindow/sysmainwindow.pri)
 
-
-# sdk path
 SDKPATH = $$PWD/../../../dist/qt5.6.3-win32-msvc2015
 
-# include headers
+DESTDIR = $${SDKPATH}/bin_dbg/plugins
+
+# 包含头文件
 INCLUDEPATH += $${SDKPATH}/include
 
-# debug suffix
+dest_dir = $${SDKPATH}/bin_dbg
+
 win32 {
     DEBUG_SUFFIX = d
 }
 
 LIB_LIST = mycore mywidget mybaseutil
 
-#
-des_dir = $$PWD/../../../dist/qt5.6.3-win32-msvc2015/bin_dbg
-
-# libs
-LIBS = -L$$des_dir
+LIBS = -L$$dest_dir
 for (lib, LIB_LIST) {
     LIBS += -l$${lib}$${DEBUG_SUFFIX}
 }
 
-DESTDIR = $$PWD/../../../dist/qt5.6.3-win32-msvc2015/bin_dbg/plugins

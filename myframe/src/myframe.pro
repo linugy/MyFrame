@@ -1,11 +1,10 @@
 TEMPLATE = subdirs
 
-
 CONFIG += ordered
 
 SUBDIRS += \
     mybaseutil \
-    mywidget \
     mycore \
+    mywidget \
     mydatabaseutil \
     myutil

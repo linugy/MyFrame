@@ -20,8 +20,3 @@ SOURCES += mydatabaseutil.cpp
 
 HEADERS += mydatabaseutil.h\
         mydatabaseutil_global.h
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}

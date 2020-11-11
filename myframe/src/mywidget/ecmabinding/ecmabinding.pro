@@ -14,33 +14,23 @@ SOURCES += mywidgetecmabinding.cpp
 
 HEADERS += mywidgetecmabinding.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
-DESTDIR = $$PWD/../../../../dist/qt5.6.3-win32-msvc2015/bin_dbg
-
-# sdk path
 SDKPATH = $$PWD/../../../../dist/qt5.6.3-win32-msvc2015
 
-# include headers
+DESTDIR = $${SDKPATH}/bin_dbg/script
+
+# 包含头文件
 INCLUDEPATH += $${SDKPATH}/include
 
-# debug suffix
+dest_dir = $${SDKPATH}/bin_dbg
+
+LIB_LIST = mybaseutil mywidget
+
 win32 {
     DEBUG_SUFFIX = d
 }
 
-LIB_LIST = mybaseutil mywidget
+LIBS = -L$$dest_dir
 
-#
-des_dir = $$PWD/../../../../dist/qt5.6.3-win32-msvc2015/bin_dbg
-
-# libs
-LIBS = -L$$des_dir
 for (lib, LIB_LIST) {
     LIBS += -l$${lib}$${DEBUG_SUFFIX}
 }
-
-DESTDIR = $${DESTDIR}/script
