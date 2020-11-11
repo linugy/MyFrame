@@ -20,6 +20,7 @@ HEADERS += plugin.h
 
 include (./sysusermgt/sysusermgt.pri)
 include (./sysmainwindow/sysmainwindow.pri)
+include (./sysrolemgt/sysrolemgt.pri)
 
 SDKPATH = $$PWD/../../../dist/qt5.6.3-win32-msvc2015
 

@@ -167,6 +167,18 @@ QList<MyClassAbs *> MyCore::getAllClass()
     return d->mAllClassLst;
 }
 
+/**
+* \brief 主界面关闭模块时，将该模块从mAllClassLst中移除
+*/
+void MyCore::deleteClass(MyClassAbs *iClass)
+{
+    Q_D(MyCore);
+    if (d->mAllClassLst.contains(iClass)) {
+        int index = d->mAllClassLst.indexOf(iClass);
+        d->mAllClassLst.removeAt(index);
+    }
+}
+
 QString MyCore::getDllName(const QString &iDllStr)
 {
     QString dllStr = iDllStr;
@@ -181,6 +193,7 @@ MyClassAbs *MyCore::openModule(const QString &iPluginName, const QString &iClass
     QObject * obj = d->mPluginMap.value(iPluginName);
     if (MyClassPluginAbs *interface = qobject_cast<MyClassPluginAbs *>(obj)) {
         resObj = interface->newClass(iClassName, iModuleName, QVariantMap());
+        // 存放所有的模块，用于执行js脚本时找到当前的模块指针，然后传到js脚本里
         d->mAllClassLst.append(resObj);
         resObj->show();
         return resObj;

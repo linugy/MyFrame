@@ -45,6 +45,7 @@ private slots:
     void onMaxBtnClicked();
     void onQuickButtonClicked();
     void onTabCloseRequested(int index);
+    void onTabCurrentChanged(int index);
 
 private:
     void initUi();
@@ -67,6 +68,7 @@ private:
     QPushButton *maxBtn = nullptr;
     QTabBar *mTabBar = nullptr;
     QStackedWidget *mStackedWidget = nullptr;
+    QStringList openedModuleUrlLst;
 };
 
 #endif // SYSMAINWINDOW_H

@@ -115,11 +115,20 @@ void SysMainWindow::onQuickButtonClicked()
 
 void SysMainWindow::onTabCloseRequested(int index)
 {
-    mTabBar->removeTab(index);
     QWidget *curWidget = mStackedWidget->widget(index);
-    mStackedWidget->removeWidget(curWidget);
-    delete curWidget;
-    curWidget = nullptr;
+    if (MyClassAbs *w = qobject_cast<MyClassAbs *>(curWidget)) {
+        APP->deleteClass(w);
+        mStackedWidget->removeWidget(curWidget);
+        mTabBar->removeTab(index);
+        openedModuleUrlLst.removeAt(index);
+        delete curWidget;
+        curWidget = nullptr;
+    }
+}
+
+void SysMainWindow::onTabCurrentChanged(int index)
+{
+    mStackedWidget->setCurrentIndex(index);
 }
 
 void SysMainWindow::initUi()
@@ -167,6 +176,7 @@ void SysMainWindow::initUi()
     tabBarLayout->addStretch(1);
     mTabBar = new QTabBar();
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), this, SLOT(onTabCloseRequested(int)));
+    connect(mTabBar, SIGNAL(currentChanged(int)), this, SLOT(onTabCurrentChanged(int)));
     tabBarLayout->addWidget(mTabBar);
     mWindowTitleLayout->insertLayout(0, tabBarLayout);
     mTabBar->setTabsClosable(true);
@@ -355,7 +365,17 @@ void SysMainWindow::routeModule(const QVariantMap &iMap)
 {
     QString moduleUrl = iMap.value("url").toString();
     if (!moduleUrl.isEmpty()) {
-        mStackedWidget->addWidget(APP->openModuleUrl(moduleUrl));
-        mTabBar->addTab(iMap.value("text").toString());
+        // 同一个url不能重复打开，但是一个C++模块可以多次打开，例如德demo1和demo2
+        if (openedModuleUrlLst.contains(moduleUrl)) {
+            int index = openedModuleUrlLst.indexOf(moduleUrl);
+            mStackedWidget->setCurrentIndex(index);
+            mTabBar->setCurrentIndex(index);
+        } else {
+            openedModuleUrlLst.append(moduleUrl);
+            QWidget *w = APP->openModuleUrl(moduleUrl);
+            mStackedWidget->addWidget(w);
+            int index = mTabBar->addTab(iMap.value("text").toString());
+            mTabBar->setCurrentIndex(index);
+        }
     }
 }

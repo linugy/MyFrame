@@ -34,6 +34,8 @@ public slots:
 
     MyScriptEngine *scriptEngine();
     QList<MyClassAbs *> getAllClass();
+    void deleteClass(MyClassAbs *iClass);
+
 private slots:
     QString getDllName(const QString &iDllStr);
 
