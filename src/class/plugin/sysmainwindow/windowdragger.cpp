@@ -22,12 +22,12 @@ WindowDragger::WindowDragger(QWidget *parent)
 {
     mousePressed = false;
     this->setFixedHeight(30);
-      QPalette pal(this->palette());
+    QPalette pal(this->palette());
 
-      //设置背景黑色
-      pal.setColor(QPalette::Background, QColor("#e3e5e8"));
-      this->setAutoFillBackground(true);
-      this->setPalette(pal);
+    //设置背景黑色
+    pal.setColor(QPalette::Background, QColor("#e3e5e8"));
+    this->setAutoFillBackground(true);
+    this->setPalette(pal);
 }
 
 bool WindowDragger::isMousePressed()
@@ -41,6 +41,7 @@ void WindowDragger::mousePressEvent(QMouseEvent *event) {
     QWidget *parent = parentWidget();
     if (parent) parent = parent->parentWidget();
     if (parent) parent = parent->parentWidget();
+    if (parent) parent = parent->parentWidget();
     if (parent) {
         wndPos = parent->pos();
     }
@@ -49,6 +50,7 @@ void WindowDragger::mousePressEvent(QMouseEvent *event) {
 void WindowDragger::mouseMoveEvent(QMouseEvent *event)
 {
     QWidget *parent = parentWidget();
+    if (parent) parent = parent->parentWidget();
     if (parent) parent = parent->parentWidget();
     if (parent) parent = parent->parentWidget();
 

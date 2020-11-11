@@ -6,6 +6,7 @@
 
 class QWidget;
 class QHBoxLayout;
+class QVBoxLayout;
 class WindowDragger;
 class MyQuickToolBar;
 class MyQuickButton;
@@ -13,6 +14,10 @@ class QPushButton;
 class QStackedWidget;
 class QTabBar;
 class QFrame;
+class QWidget;
+class QSplitter;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 class SysMainWindow : public MyClassAbs
 {
@@ -46,6 +51,7 @@ private slots:
     void onQuickButtonClicked();
     void onTabCloseRequested(int index);
     void onTabCurrentChanged(int index);
+    void onMenuTreeItemClicked(QTreeWidgetItem *iItem, int iColumn);
 
 private:
     void initUi();
@@ -55,6 +61,7 @@ private:
     void changeGeometry(const QPoint &gloPoint);
     void changeButtonState();
     void routeModule(const QVariantMap &iMap);
+    void routeMenu(const QVariantMap &iMap);
 
 private:
     QWidget *mMainWidget = nullptr;
@@ -69,6 +76,11 @@ private:
     QTabBar *mTabBar = nullptr;
     QStackedWidget *mStackedWidget = nullptr;
     QStringList openedModuleUrlLst;
+    QFrame *mExpandFrame = nullptr;
+    QVBoxLayout *mExpandLayout = nullptr;
+    QTreeWidget *mMenuTree = nullptr;
+    QSplitter *mSplitter = nullptr;
+    MyQuickButton *mCurMenuBtn = nullptr;
 };
 
 #endif // SYSMAINWINDOW_H

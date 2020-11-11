@@ -2,6 +2,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QTreeWidgetItem>
+#include <QTreeWidget>
 #include <QPushButton>
 #include <QFrame>
 #include <QDebug>
@@ -13,6 +15,9 @@
 #include <QIcon>
 #include <QStackedWidget>
 #include <QTabBar>
+#include <QWidget>
+#include <QSplitter>
+#include <QTreeWidget>
 #include <mycore/mycore.h>
 #include "windowdragger.h"
 #include "myquicktoolbar.h"
@@ -27,6 +32,7 @@ SysMainWindow::SysMainWindow(const QString &iModuleName, QWidget *parent)
     : MyClassAbs(parent)
 {
     initModule(iModuleName);
+    this->setMinimumSize(800, 600);
     initUi();
     setStyleSheet(QString("SysMainWindow{border:solid; border-color:#697d91; border-width:1px;}"));
     setMouseTracking(true);
@@ -109,6 +115,24 @@ void SysMainWindow::onQuickButtonClicked()
         QVariantMap config = btn->getData().toMap();
         if (config.value("type").toString() == "module") {
             routeModule(config);
+        } else if (config.value("type").toString() == "menu") {
+            bool isSameMenu = false;
+            if (mCurMenuBtn == btn) {
+                isSameMenu = true;
+            }
+            mCurMenuBtn = btn;
+
+            if (isSameMenu) {
+                if (mExpandFrame->isHidden()) {
+                    mExpandFrame->show();
+                } else {
+                    mExpandFrame->hide();
+                }
+            } else {
+                mExpandFrame->show();
+                // 展示menu内容
+                routeMenu(config);
+            }
         }
     }
 }
@@ -153,15 +177,42 @@ void SysMainWindow::initUi()
     // 添加多个quickBtn到quickToolBar
     addQuickButtons();
 
+    // 右侧splitter
+    mSplitter = new QSplitter();
+    mainLayout->addWidget(mSplitter);
+
+    // expand
+    mExpandFrame = new QFrame(mSplitter);
+    mSplitter->addWidget(mExpandFrame);
+    mExpandFrame->setStyleSheet(QString("QFrame{background-color:#e6e6e6;}"));
+    mExpandFrame->setWindowFlags(Qt::FramelessWindowHint);
+    mExpandFrame->setMinimumWidth(200);
+    mExpandFrame->setMaximumWidth(400);
+    mExpandFrame->hide();
+
+    // menu
+    mExpandLayout = new QVBoxLayout(mExpandFrame);
+    mExpandLayout->setMargin(0);
+    mExpandLayout->setSpacing(0);
+    mMenuTree = new QTreeWidget(mExpandFrame);
+    mMenuTree->setColumnCount(1);
+    mMenuTree->setHeaderHidden(true);
+    connect(mMenuTree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(onMenuTreeItemClicked(QTreeWidgetItem*,int)));
+    mExpandLayout->addWidget(mMenuTree);
+
     // 右侧主界面
-    QWidget *bodyWidget = new QWidget(mMainWidget);
-    mainLayout->addWidget(bodyWidget);
+    QWidget *bodyWidget = new QWidget(mSplitter);
+    mSplitter->addWidget(bodyWidget);
+    mSplitter->setCollapsible(0, false);
     QVBoxLayout *bodyLayout = new QVBoxLayout(bodyWidget);
     bodyLayout->setMargin(MARGIN);
     bodyLayout->setSpacing(0);
 
+    mSplitter->setStretchFactor(0, 0);
+    mSplitter->setStretchFactor(1, 1);
+
     // windowBar
-    mWindowTitleBar = new WindowDragger(mMainWidget);
+    mWindowTitleBar = new WindowDragger(bodyWidget);
     bodyLayout->addWidget(mWindowTitleBar);
     mWindowTitleBar->setFixedHeight(50);
     mWindowTitleLayout = new QHBoxLayout(mWindowTitleBar);
@@ -365,7 +416,7 @@ void SysMainWindow::routeModule(const QVariantMap &iMap)
 {
     QString moduleUrl = iMap.value("url").toString();
     if (!moduleUrl.isEmpty()) {
-        // 同一个url不能重复打开，但是一个C++模块可以多次打开，例如德demo1和demo2
+        // 如果是同一个url，那么转到该模块；一个C++模块可以多次打开，例如德demo1和demo2
         if (openedModuleUrlLst.contains(moduleUrl)) {
             int index = openedModuleUrlLst.indexOf(moduleUrl);
             mStackedWidget->setCurrentIndex(index);
@@ -377,5 +428,33 @@ void SysMainWindow::routeModule(const QVariantMap &iMap)
             int index = mTabBar->addTab(iMap.value("text").toString());
             mTabBar->setCurrentIndex(index);
         }
+    }
+}
+
+void SysMainWindow::routeMenu(const QVariantMap &iMap)
+{
+    QString title = iMap.value("text").toString();
+    QVariantList itemLst = iMap.value("item").toList();
+
+    mMenuTree->clear();
+    QTreeWidgetItem *rootItem = new QTreeWidgetItem();
+    rootItem->setText(0, title);
+    rootItem->setData(0, Qt::UserRole, iMap);
+    for (int i = 0; i < itemLst.length(); i++) {
+        QVariantMap m = itemLst.at(i).toMap();
+        QTreeWidgetItem *item = new QTreeWidgetItem();
+        item->setText(0, m.value("text").toString());
+        item->setData(0, Qt::UserRole, m);
+        rootItem->addChild(item);
+    }
+    mMenuTree->addTopLevelItem(rootItem);
+    mMenuTree->expandAll();
+}
+
+void SysMainWindow::onMenuTreeItemClicked(QTreeWidgetItem *iItem, int iColumn)
+{
+    QVariantMap m = iItem->data(0, Qt::UserRole).toMap();
+    if (m.value("type").toString() == "module") {
+        routeModule(m);
     }
 }
