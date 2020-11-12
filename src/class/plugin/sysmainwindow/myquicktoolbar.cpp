@@ -25,6 +25,7 @@ MyQuickToolBar::~MyQuickToolBar()
 
 void MyQuickToolBar::loadQuickButtons(const QVariantList &iVarLst)
 {
+    Q_UNUSED(iVarLst);
 //    for (QVariant var: iVarLst) {
 //        QVariantMap m = var.toMap();
 //        if (m.value("type").toString() == "module" || m.value("type").toString() == "menu") {

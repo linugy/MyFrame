@@ -1,4 +1,4 @@
-#include "myclassabs.h"
+﻿#include "myclassabs.h"
 #include <QDir>
 #include <QFile>
 #include <mycore/mycore.h>

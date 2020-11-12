@@ -1,4 +1,4 @@
-#include "mymain.h"
+﻿#include "mymain.h"
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QMessageBox>

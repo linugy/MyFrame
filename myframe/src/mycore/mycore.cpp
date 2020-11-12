@@ -1,4 +1,4 @@
-#include "mycore.h"
+﻿#include "mycore.h"
 #include <QApplication>
 #include <QMap>
 #include <QVariantMap>

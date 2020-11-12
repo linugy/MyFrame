@@ -1,4 +1,4 @@
-#include "sysmainwindow.h"
+﻿#include "sysmainwindow.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -453,6 +453,7 @@ void SysMainWindow::routeMenu(const QVariantMap &iMap)
 
 void SysMainWindow::onMenuTreeItemClicked(QTreeWidgetItem *iItem, int iColumn)
 {
+    Q_UNUSED(iColumn);
     QVariantMap m = iItem->data(0, Qt::UserRole).toMap();
     if (m.value("type").toString() == "module") {
         routeModule(m);

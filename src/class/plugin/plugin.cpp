@@ -11,6 +11,7 @@ QStringList Plugin::getClassList()
 
 MyClassAbs *Plugin::newClass(const QString &iClassName, const QString &iModuleName, const QVariantMap &iUrlPars)
 {
+    Q_UNUSED(iUrlPars);
     if (iClassName == "SysUserMgt") {
         return new SysUserMgt(iModuleName);
     } else if (iClassName == "SysMainWindow") {
