@@ -208,8 +208,8 @@ void SysMainWindow::initUi()
     bodyLayout->setMargin(MARGIN);
     bodyLayout->setSpacing(0);
 
-    mSplitter->setStretchFactor(0, 0);
-    mSplitter->setStretchFactor(1, 1);
+    mSplitter->setStretchFactor(0, 1);
+    mSplitter->setStretchFactor(1, 10);
 
     // windowBar
     mWindowTitleBar = new WindowDragger(bodyWidget);

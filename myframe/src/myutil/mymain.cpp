@@ -85,7 +85,8 @@ int MyMain::run(const QVariantMap &iArgsMap)
     login.setPassword(iArgsMap.value("password").toString());
     int res = login.exec();
     if (res == 1) {
-        APP->openModuleUrl(iArgsMap.value("module").toString());
+        MyClassAbs *w = APP->openModuleUrl(iArgsMap.value("module").toString());
+        w->show();
     }
     return res;
 }

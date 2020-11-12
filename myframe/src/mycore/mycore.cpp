@@ -195,7 +195,6 @@ MyClassAbs *MyCore::openModule(const QString &iPluginName, const QString &iClass
         resObj = interface->newClass(iClassName, iModuleName, QVariantMap());
         // 存放所有的模块，用于执行js脚本时找到当前的模块指针，然后传到js脚本里
         d->mAllClassLst.append(resObj);
-        resObj->show();
         return resObj;
     }
     return resObj;
