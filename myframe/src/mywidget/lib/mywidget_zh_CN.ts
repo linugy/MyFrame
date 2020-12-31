@@ -4,17 +4,17 @@
 <context>
     <name>MyLoginDialog</name>
     <message>
-        <location filename="mylogindialog.cpp" line="67"/>
+        <location filename="mylogindialog.cpp" line="91"/>
         <source>username</source>
         <translation>用户名</translation>
     </message>
     <message>
-        <location filename="mylogindialog.cpp" line="73"/>
+        <location filename="mylogindialog.cpp" line="97"/>
         <source>password</source>
         <translation>密码</translation>
     </message>
     <message>
-        <location filename="mylogindialog.cpp" line="78"/>
+        <location filename="mylogindialog.cpp" line="102"/>
         <source>login</source>
         <translation>登录</translation>
     </message>

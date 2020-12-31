@@ -38,10 +38,12 @@ bool WindowDragger::isMousePressed()
 void WindowDragger::mousePressEvent(QMouseEvent *event) {
     mousePressed = true;
     mousePos = event->globalPos();
-    QWidget *parent = parentWidget();
-    if (parent) parent = parent->parentWidget();
-    if (parent) parent = parent->parentWidget();
-    if (parent) parent = parent->parentWidget();
+//    QWidget *parent = parentWidget();
+//    if (parent) parent = parent->parentWidget();
+//    if (parent) parent = parent->parentWidget();
+//    if (parent) parent = parent->parentWidget();
+
+    QWidget *parent = this->window();
     if (parent) {
         wndPos = parent->pos();
     }
@@ -49,11 +51,12 @@ void WindowDragger::mousePressEvent(QMouseEvent *event) {
 
 void WindowDragger::mouseMoveEvent(QMouseEvent *event)
 {
-    QWidget *parent = parentWidget();
-    if (parent) parent = parent->parentWidget();
-    if (parent) parent = parent->parentWidget();
-    if (parent) parent = parent->parentWidget();
+//    QWidget *parent = parentWidget();
+//    if (parent) parent = parent->parentWidget();
+//    if (parent) parent = parent->parentWidget();
+//    if (parent) parent = parent->parentWidget();
 
+    QWidget *parent = this->window();
     if (parent && mousePressed) {
         parent->move(wndPos + (event->globalPos() - mousePos));
 
